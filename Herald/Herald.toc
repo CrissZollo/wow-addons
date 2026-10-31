@@ -1,0 +1,7 @@
+## Interface: 16001
+## Version: 1.0.0
+## Title: Herald
+## Notes: Keeps combat logging on and saves character snapshots so the herald watcher can post first kills, level milestones and progress reports to Discord.
+## SavedVariables: HeraldDB
+
+Herald.lua

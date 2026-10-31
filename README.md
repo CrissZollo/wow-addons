@@ -5,7 +5,7 @@ and follow its guide.
 
 | Addon | What it does | Windows | Linux (Wine / Proton) | Guide |
 |---|---|---|---|---|
-| **FirstKills** | Posts your first kills, boss kills, enemy players, level milestones and progress reports (gear, stats, gold) to a Discord channel | [Download](https://github.com/CrissZollo/wow-addons/releases/download/FirstKills-v1.0.0/FirstKills-Windows.zip) | [Download](https://github.com/CrissZollo/wow-addons/releases/download/FirstKills-v1.0.0/FirstKills-Linux.zip) | [Read me](FirstKills/README.md) |
+| **Herald** | Posts your first kills, boss kills, enemy players, level milestones and progress reports (gear, stats, gold) to a Discord channel | [Download](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Windows.zip) | [Download](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Linux.zip) | [Read me](Herald/README.md) |
 
 All versions are on the [releases page](https://github.com/CrissZollo/wow-addons/releases).
 
@@ -13,7 +13,7 @@ All versions are on the [releases page](https://github.com/CrissZollo/wow-addons
 
 - **Windows:** download the *Windows* file. Everything it needs is included.
 - **Linux:** WoW runs through Wine or Proton (Heroic, Lutris, Steam, Bottles). The addon part
-  works exactly as on Windows. Addons with a helper program (like FirstKills) have a *Linux*
+  works exactly as on Windows. Addons with a helper program (like Herald) have a *Linux*
   download that uses your system's Python instead.
 
 Each addon's guide lists any differences between the platforms.
@@ -31,7 +31,7 @@ prefix's `drive_c`). Then restart the game.
 - **Layout:** one folder per addon, named exactly like its `.toc` file. Each has its own `README.md`.
   Addons with downloads have a `build/package.sh` that writes zips to `<Addon>/dist/`, which isn't committed.
 - **Releasing:** commit your changes, then run `./release.sh <Addon> <version>`, e.g.
-  `./release.sh FirstKills 1.0.1`. It bumps the version, builds the zips, updates the download
+  `./release.sh Herald 1.0.1`. It bumps the version, builds the zips, updates the download
   links above, tags `<Addon>-v<version>`, pushes, and creates the GitHub release.
 - **Adding an addon:** create its folder, add a row to the table above (link format:
   `releases/download/<Addon>-v<version>/<file>`), and give it a `build/package.sh` if it ships zips.

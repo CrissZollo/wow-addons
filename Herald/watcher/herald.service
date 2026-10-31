@@ -2,7 +2,7 @@
 Description=Post WoW Forever first kills to Discord
 
 [Service]
-ExecStart=/usr/bin/python3 %h/Projects/wow-addons/FirstKills/watcher/wow-firstkills.py
+ExecStart=/usr/bin/python3 %h/Projects/wow-addons/Herald/watcher/herald.py
 Restart=on-failure
 RestartSec=10
 

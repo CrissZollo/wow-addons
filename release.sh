@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Publish a new version of an addon as a GitHub release.
 #
-#   ./release.sh FirstKills 1.0.1
+#   ./release.sh Herald 1.0.1
 #
 # Sets "## Version:" in the addon's .toc, builds its downloads (<Addon>/build/package.sh),
 # points the download links in the READMEs at the new release, commits, tags

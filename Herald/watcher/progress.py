@@ -1,6 +1,6 @@
-"""Progress reports and level milestones, built from the FirstKills addon's saved data.
+"""Progress reports and level milestones, built from the Herald addon's saved data.
 
-The addon writes FirstKillsDB to WTF/Account/<account>/SavedVariables/FirstKills.lua
+The addon writes HeraldDB to WTF/Account/<account>/SavedVariables/Herald.lua
 when you log out or /reload. Each time that file changes we:
   - post a card for every new milestone level (with the level-up screenshot attached),
   - post a progress report comparing the last report with now, if you've played at
@@ -332,7 +332,7 @@ class Progress:
         if time.time() < self.next_check:
             return
         self.next_check = time.time() + 3
-        for path in Path(self.cfg["wtf_dir"]).glob("Account/*/SavedVariables/FirstKills.lua"):
+        for path in Path(self.cfg["wtf_dir"]).glob("Account/*/SavedVariables/Herald.lua"):
             try:
                 mtime = path.stat().st_mtime
             except OSError:
@@ -340,9 +340,9 @@ class Progress:
             if self.seen_mtime.get(path) == mtime or time.time() - mtime < 2:
                 continue  # unchanged, or WoW may still be writing it
             try:
-                db = parse_saved_variables(path.read_bytes()).get("FirstKillsDB") or {}
+                db = parse_saved_variables(path.read_bytes()).get("HeraldDB") or {}
             except (ValueError, IndexError) as e:
-                print(f"[firstkills] couldn't read {path.name}: {e}", flush=True)
+                print(f"[herald] couldn't read {path.name}: {e}", flush=True)
                 continue
             self.seen_mtime[path] = mtime
             for key, char in (db.get("chars") or {}).items():

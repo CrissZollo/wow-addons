@@ -1,4 +1,4 @@
-# build output (e.g. FirstKills/dist/FirstKills-Windows.zip)
+# build output (e.g. Herald/dist/Herald-Windows.zip)
 dist/
 __pycache__/
 *.pyc

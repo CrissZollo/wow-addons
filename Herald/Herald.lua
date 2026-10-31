@@ -1,11 +1,11 @@
--- FirstKills
---  * keeps combat logging on, so the wow-firstkills.py watcher on your PC can spot
+-- Herald
+--  * keeps combat logging on, so the herald.py watcher on your PC can spot
 --    first kills in Logs/WoWCombatLog-*.txt and post them to Discord;
 --  * saves a snapshot of the character (level, gold, stats, gear) at login and at
 --    logout / reload, which the watcher turns into a progress report;
 --  * on milestone levels (every 10, and max level) records the level-up and takes
 --    a screenshot for the watcher to attach.
--- WoW only writes FirstKillsDB to disk at logout or /reload, so the progress report
+-- WoW only writes HeraldDB to disk at logout or /reload, so the progress report
 -- and milestone posts go out then. Addons can't reach the internet themselves.
 
 local ADDON = ...
@@ -19,10 +19,10 @@ local SLOTS = {
 }
 local STATS = { "str", "agi", "sta", "int", "spi" }  -- UnitStat index 1..5
 
-local char  -- this character's entry in FirstKillsDB.chars
+local char  -- this character's entry in HeraldDB.chars
 
 local function say(msg)
-    print("|cff66ccffFirstKills:|r " .. msg)
+    print("|cff66ccffHerald:|r " .. msg)
 end
 
 -- Values can be "secret" (unreadable) for addons in some situations; store nothing then.
@@ -100,16 +100,16 @@ frame:RegisterEvent("PLAYER_LOGOUT")
 frame:SetScript("OnEvent", function(self, event, ...)
     if event == "ADDON_LOADED" then
         if ... ~= ADDON then return end
-        FirstKillsDB = FirstKillsDB or {}
-        FirstKillsDB.chars = FirstKillsDB.chars or {}
+        HeraldDB = HeraldDB or {}
+        HeraldDB.chars = HeraldDB.chars or {}
         self:UnregisterEvent("ADDON_LOADED")
 
     elseif event == "PLAYER_ENTERING_WORLD" then
         local isInitialLogin = ...
         local name = UnitName("player")
         local key = name .. "-" .. (GetNormalizedRealmName() or GetRealmName():gsub("%s", ""))
-        FirstKillsDB.chars[key] = FirstKillsDB.chars[key] or { milestones = {} }
-        char = FirstKillsDB.chars[key]
+        HeraldDB.chars[key] = HeraldDB.chars[key] or { milestones = {} }
+        char = HeraldDB.chars[key]
         local _, class = UnitClass("player")
         local _, race = UnitRace("player")
         char.info = { name = name, realm = GetRealmName(), class = class, race = race,
@@ -137,9 +137,8 @@ frame:SetScript("OnEvent", function(self, event, ...)
     end
 end)
 
-SLASH_FIRSTKILLS1 = "/firstkills"
-SLASH_FIRSTKILLS2 = "/fk"
-SlashCmdList.FIRSTKILLS = function()
+SLASH_HERALD1 = "/herald"
+SlashCmdList.HERALD = function()
     ensureLogging()
     say("combat logging is " .. (LoggingCombat() and "ON" or "OFF"))
     if char and char.sessionStart then

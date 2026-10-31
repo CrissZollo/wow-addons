@@ -7,18 +7,18 @@ Posts a Discord embed for:
   - dungeon and raid boss encounters (ENCOUNTER_END)
   - the first time you kill each enemy player
 
-Needs combat logging on in-game (/combatlog, or the FirstKills addon does it for you).
-Config and state: ~/.config/wow-firstkills + ~/.local/share/wow-firstkills (Linux),
-%APPDATA%\\FirstKills (Windows).
+Needs combat logging on in-game (/combatlog, or the Herald addon does it for you).
+Config and state: ~/.config/herald + ~/.local/share/herald (Linux),
+%APPDATA%\\Herald (Windows).
 
-  wow-firstkills.py              watch the log and post (default)
-  wow-firstkills.py setup        find the game, install the addon, set the webhook
-  wow-firstkills.py start        setup if needed, then watch (what Start FirstKills.bat runs)
-  wow-firstkills.py stop         stop a watcher running in the background
-  wow-firstkills.py install-addon  copy the addon into the game again (after an update)
-  wow-firstkills.py autostart on|off   start with Windows (Windows only)
-  wow-firstkills.py test         post sample messages to the webhook
-  wow-firstkills.py list         show recorded first kills
+  herald.py              watch the log and post (default)
+  herald.py setup        find the game, install the addon, set the webhook
+  herald.py start        setup if needed, then watch (what Start Herald.bat runs)
+  herald.py stop         stop a watcher running in the background
+  herald.py install-addon  copy the addon into the game again (after an update)
+  herald.py autostart on|off   start with Windows (Windows only)
+  herald.py test         post sample messages to the webhook
+  herald.py list         show recorded first kills
   add --dry-run to print the messages instead of posting them
 """
 import csv
@@ -44,14 +44,14 @@ import progress  # noqa: E402
 
 IS_WIN = os.name == "nt"
 if IS_WIN:
-    APP_DIR = Path(os.environ.get("APPDATA", Path.home())) / "FirstKills"
+    APP_DIR = Path(os.environ.get("APPDATA", Path.home())) / "Herald"
     CONFIG_PATH = APP_DIR / "config.json"
     STATE_PATH = APP_DIR / "kills.json"
 else:
     CONFIG_PATH = (Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
-                   / "wow-firstkills" / "config.json")
+                   / "herald" / "config.json")
     STATE_PATH = (Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local/share"))
-                  / "wow-firstkills" / "kills.json")
+                  / "herald" / "kills.json")
 LOCK_PATH = STATE_PATH.with_name("watcher.lock")
 STOP_PATH = STATE_PATH.with_name("watcher.stop")
 LOG_PATH = STATE_PATH.with_name("watcher.log")
@@ -76,7 +76,7 @@ DEFAULTS = {
     "screenshots_dir": "",
 }
 REPORTS_PATH = STATE_PATH.with_name("reports.json")
-UA = "wow-firstkills/1.1"
+UA = "herald/1.1"
 PSEP = "pvp:"  # state key prefix for enemy players
 
 AFFIL_MINE, AFFIL_PARTY, AFFIL_RAID = 0x1, 0x2, 0x4
@@ -100,7 +100,7 @@ MILESTONES = {10, 25, 50, 100, 250, 500, 750, 1000}
 
 
 def log(msg):
-    print(f"[firstkills] {msg}", flush=True)
+    print(f"[herald] {msg}", flush=True)
 
 
 def read_raw_config():
@@ -209,7 +209,7 @@ def multipart(payload, attachment):
 
 
 def post(cfg, payload, dry_run=False, attachment=None):
-    payload = {"username": "First Kills", "allowed_mentions": {"parse": []}, **payload}
+    payload = {"username": "Herald", "allowed_mentions": {"parse": []}, **payload}
     if dry_run:
         log("would post:\n" + json.dumps(payload, indent=2, ensure_ascii=False)
             + (f"\n  + attachment {attachment}" if attachment else ""))
@@ -249,7 +249,7 @@ def embed(style, title, url, description, fields, author, thumb=None, image=None
         "color": color,
         "thumbnail": {"url": thumb or ICON.format(icon)},
         "fields": [{"name": k, "value": v, "inline": True} for k, v in fields if v],
-        "footer": {"text": "WoW Forever · First Kills"},
+        "footer": {"text": "WoW Forever · Herald"},
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     if url:
@@ -524,7 +524,7 @@ def release_lock():
 
 def watch(cfg, dry_run):
     if not dry_run and not acquire_lock():
-        log("FirstKills is already running (in the background or another window)")
+        log("Herald is already running (in the background or another window)")
         return False
     STOP_PATH.unlink(missing_ok=True)
     tracker = Tracker(cfg, load_state(), dry_run)
@@ -579,29 +579,29 @@ def ask(prompt, default=""):
 
 def addon_source():
     """The addon folder shipped next to the watcher (bundle) or the project folder itself."""
-    for d in (SCRIPT.parent.parent / "FirstKills", SCRIPT.parent.parent):
-        if (d / "FirstKills.toc").exists():
+    for d in (SCRIPT.parent.parent / "Herald", SCRIPT.parent.parent):
+        if (d / "Herald.toc").exists():
             return d
     return None
 
 
 def install_addon(game):
     src = addon_source()
-    dest = game / "Interface" / "AddOns" / "FirstKills"
+    dest = game / "Interface" / "AddOns" / "Herald"
     if not src:
-        print("  ! addon files not found next to the watcher; copy the FirstKills folder by hand")
+        print("  ! addon files not found next to the watcher; copy the Herald folder by hand")
         return
     if dest.resolve() == src.resolve():
         print(f"  ✓ addon already linked: {dest}")
         return
     try:
         dest.mkdir(parents=True, exist_ok=True)
-        for name in ("FirstKills.toc", "FirstKills.lua"):
+        for name in ("Herald.toc", "Herald.lua"):
             (dest / name).write_bytes((src / name).read_bytes())
         print(f"  ✓ addon installed in {dest}")
     except OSError as e:
         print(f"  ! couldn't install the addon ({e}).\n"
-              f"    Copy the FirstKills folder into {dest.parent} yourself.")
+              f"    Copy the Herald folder into {dest.parent} yourself.")
 
 
 def refresh_addon():
@@ -612,7 +612,7 @@ def refresh_addon():
 
 
 def setup(cfg_dry_run=False):
-    print("\n=== FirstKills setup ===\n")
+    print("\n=== Herald setup ===\n")
     if IS_WIN and "\\AppData\\Local\\Temp\\" in str(SCRIPT):
         print("It looks like this is running from inside the zip file.\n"
               "Right-click the zip -> Extract All, put the folder somewhere permanent\n"
@@ -651,16 +651,16 @@ def setup(cfg_dry_run=False):
 
     cfg = load_config()
     ok = post(cfg, {"embeds": [{
-        "title": "✅ FirstKills is connected",
+        "title": "✅ Herald is connected",
         "description": "First kills, level milestones and progress reports will show up here.",
         "color": 0x2ECC71}]}, cfg_dry_run)
     print("  ✓ test message sent, check Discord" if ok else "  ! sending the test message failed")
 
     # 3. autostart
     when = "Windows starts" if IS_WIN else "you log in"
-    yes = ask(f"\nStart FirstKills automatically when {when}? [Y/n]: ", "y").lower()
+    yes = ask(f"\nStart Herald automatically when {when}? [Y/n]: ", "y").lower()
     set_autostart(not yes.startswith("n"))
-    print("\nSetup done. In game, type /fk to check that combat logging is ON.\n")
+    print("\nSetup done. In game, type /herald to check that combat logging is ON.\n")
     return True
 
 
@@ -672,7 +672,7 @@ def startup_dir():
 def autostart_enabled():
     if not IS_WIN:
         return unit_path().exists()
-    return any((startup_dir() / n).exists() for n in ("FirstKills.lnk", "FirstKills.bat"))
+    return any((startup_dir() / n).exists() for n in ("Herald.lnk", "Herald.bat"))
 
 
 def pythonw():
@@ -681,8 +681,8 @@ def pythonw():
     return w if w.exists() else exe
 
 
-STOP_HINT = "run 'Stop FirstKills.bat'" if IS_WIN else "run: firstkills stop"
-UNIT = "wow-firstkills"
+STOP_HINT = "run 'Stop Herald.bat'" if IS_WIN else "run: herald stop"
+UNIT = "herald"
 
 
 def unit_path():
@@ -700,7 +700,7 @@ def systemctl(*args):
 
 def set_autostart_linux(on):
     if not shutil.which("systemctl"):
-        print("  ! no systemd here; start FirstKills yourself before playing (firstkills start)")
+        print("  ! no systemd here; start Herald yourself before playing (herald start)")
         return
     if not on:
         systemctl("disable", "--now", UNIT)
@@ -710,20 +710,20 @@ def set_autostart_linux(on):
         return
     unit_path().parent.mkdir(parents=True, exist_ok=True)
     unit_path().write_text(
-        "[Unit]\nDescription=Post WoW first kills and progress to Discord (FirstKills)\n\n"
+        "[Unit]\nDescription=Post WoW first kills and progress to Discord (Herald)\n\n"
         f'[Service]\nExecStart="{sys.executable}" "{SCRIPT}"\n'
         "Restart=on-failure\nRestartSec=10\n\n[Install]\nWantedBy=default.target\n",
         encoding="utf-8")
     if systemctl("daemon-reload") and systemctl("enable", UNIT):
-        print("  ✓ FirstKills will start automatically when you log in (systemd user service)")
+        print("  ✓ Herald will start automatically when you log in (systemd user service)")
     else:
-        print("  ! couldn't enable the systemd user service; start FirstKills yourself before playing")
+        print("  ! couldn't enable the systemd user service; start Herald yourself before playing")
 
 
 def set_autostart(on):
     if not IS_WIN:
         return set_autostart_linux(on)
-    lnk, bat = startup_dir() / "FirstKills.lnk", startup_dir() / "FirstKills.bat"
+    lnk, bat = startup_dir() / "Herald.lnk", startup_dir() / "Herald.bat"
     if not on:
         lnk.unlink(missing_ok=True)
         bat.unlink(missing_ok=True)
@@ -733,7 +733,7 @@ def set_autostart(on):
     q = lambda p: str(p).replace("'", "''")  # PowerShell single-quoted string
     ps = (f"$s=(New-Object -ComObject WScript.Shell).CreateShortcut('{q(lnk)}');"
           f"$s.TargetPath='{q(pythonw())}';$s.Arguments='\"{q(SCRIPT)}\" --background';"
-          f"$s.WorkingDirectory='{q(SCRIPT.parent)}';$s.Description='FirstKills Discord poster';$s.Save()")
+          f"$s.WorkingDirectory='{q(SCRIPT.parent)}';$s.Description='Herald Discord poster';$s.Save()")
     try:
         r = subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", ps],
                            capture_output=True, text=True, timeout=60)
@@ -742,15 +742,15 @@ def set_autostart(on):
         err = str(e)
     if lnk.exists():
         bat.unlink(missing_ok=True)
-        print("  ✓ FirstKills will start with Windows (no window, runs in the background)")
+        print("  ✓ Herald will start with Windows (no window, runs in the background)")
         return
     # Fallback without PowerShell: a tiny batch file (flashes a window briefly at login).
     try:
         bat.write_text(f'@start "" "{pythonw()}" "{SCRIPT}" --background\r\n', encoding="utf-8")
-        print("  ✓ FirstKills will start with Windows (runs in the background)")
+        print("  ✓ Herald will start with Windows (runs in the background)")
     except OSError as e:
         print(f"  ! couldn't set up autostart: {err or e}\n"
-              "    You can start it yourself with 'Start FirstKills.bat' before playing.")
+              "    You can start it yourself with 'Start Herald.bat' before playing.")
 
 
 def start_background():
@@ -766,20 +766,20 @@ def start_background():
 def stop():
     if not IS_WIN and systemctl("is-active", "--quiet", UNIT):
         systemctl("stop", UNIT)
-        print("FirstKills stopped (it starts again at your next login if autostart is on).")
+        print("Herald stopped (it starts again at your next login if autostart is on).")
         return
     if acquire_lock():
-        print("FirstKills isn't running.")
+        print("Herald isn't running.")
         return
     STOP_PATH.parent.mkdir(parents=True, exist_ok=True)
     STOP_PATH.touch()
     for _ in range(20):
         time.sleep(0.5)
         if not STOP_PATH.exists():
-            print("FirstKills stopped.")
+            print("Herald stopped.")
             return
-    print("FirstKills didn't respond; end 'pythonw.exe' in Task Manager." if IS_WIN
-          else "FirstKills didn't respond; kill it with: pkill -f wow-firstkills.py")
+    print("Herald didn't respond; end 'pythonw.exe' in Task Manager." if IS_WIN
+          else "Herald didn't respond; kill it with: pkill -f herald.py")
 
 
 def main():
@@ -815,7 +815,7 @@ def main():
         else:
             refresh_addon()  # after an update, put the new addon version in the game
         if not dry_run and not acquire_lock():
-            print("FirstKills is already running in the background. You can close this window.\n"
+            print("Herald is already running in the background. You can close this window.\n"
                   f"To stop it, {STOP_HINT}.")
             return 0
         if autostart_enabled():
@@ -823,7 +823,7 @@ def main():
             release_lock()
             start_background()
             time.sleep(2)
-            print("FirstKills is running in the background. You can close this window.\n"
+            print("Herald is running in the background. You can close this window.\n"
                   f"To stop it, {STOP_HINT}.")
             return 0
         print("Watching... leave this window open while you play (close it to stop).\n")

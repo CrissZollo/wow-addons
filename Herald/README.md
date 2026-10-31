@@ -1,4 +1,4 @@
-# FirstKills
+# Herald
 
 Posts your WoW Forever adventures to a Discord channel as cards:
 
@@ -18,7 +18,7 @@ only time WoW lets addons save their data.
 
 | Windows | Linux (Wine / Proton) |
 |---|---|
-| [**FirstKills-Windows.zip**](https://github.com/CrissZollo/wow-addons/releases/download/FirstKills-v1.0.0/FirstKills-Windows.zip) | [**FirstKills-Linux.zip**](https://github.com/CrissZollo/wow-addons/releases/download/FirstKills-v1.0.0/FirstKills-Linux.zip) |
+| [**Herald-Windows.zip**](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Windows.zip) | [**Herald-Linux.zip**](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Linux.zip) |
 
 Older versions are on the [releases page](https://github.com/CrissZollo/wow-addons/releases).
 
@@ -27,30 +27,30 @@ private link, so don't post it anywhere public.
 
 ## Windows guide
 
-1. Download **FirstKills-Windows.zip** and extract it (right-click → *Extract All*) somewhere
-   permanent, for example `Documents\FirstKills-Windows`. Don't run it from inside the zip.
-2. Double-click **Start FirstKills.bat**.
+1. Download **Herald-Windows.zip** and extract it (right-click → *Extract All*) somewhere
+   permanent, for example `Documents\Herald-Windows`. Don't run it from inside the zip.
+2. Double-click **Start Herald.bat**.
    - If Windows says *"Windows protected your PC"*: click **More info → Run anyway**.
      This happens with any downloaded script that isn't signed.
 3. The setup:
    - finds WoW Forever and installs the addon (if your game is somewhere unusual, it asks you to paste the folder path),
    - asks for the **webhook URL** (paste with right-click or Ctrl+V) and sends a test message to Discord,
-   - asks *"Start FirstKills automatically when Windows starts?"*. Answer **Y**, and from
+   - asks *"Start Herald automatically when Windows starts?"*. Answer **Y**, and from
      then on it runs hidden in the background with no window.
-4. Restart WoW. On the character screen, check that **First Kills** is ticked under *AddOns*.
-   In game, type **`/fk`**. It should say *combat logging is ON*.
+4. Restart WoW. On the character screen, check that **Herald** is ticked under *AddOns*.
+   In game, type **`/herald`**. It should say *combat logging is ON*.
 
-The other files in the folder: **Stop FirstKills.bat** stops it, and **FirstKills Setup.bat** lets
+The other files in the folder: **Stop Herald.bat** stops it, and **Herald Setup.bat** lets
 you change the webhook, reinstall the addon, or turn autostart on or off.
 
-**Updating:** run *Stop FirstKills.bat*, replace the folder with the new download (same place),
-then run *Start FirstKills.bat*. It puts the new addon version in the game too. Your settings and history are kept.
+**Updating:** run *Stop Herald.bat*, replace the folder with the new download (same place),
+then run *Start Herald.bat*. It puts the new addon version in the game too. Your settings and history are kept.
 
 ## Linux guide
 
 For WoW Forever running through Wine or Proton (Heroic, Lutris, Steam, Bottles, plain Wine).
 
-1. Download **FirstKills-Linux.zip** and extract it.
+1. Download **Herald-Linux.zip** and extract it.
 2. Open a terminal in the extracted folder and run:
    ```sh
    bash install.sh
@@ -58,16 +58,16 @@ For WoW Forever running through Wine or Proton (Heroic, Lutris, Steam, Bottles, 
    - It needs `python3`, which is already installed on almost every distro. If it's missing,
      the installer tells you the command to install it.
 3. The setup:
-   - copies FirstKills to `~/.local/share/FirstKills` and adds a `firstkills` command,
+   - copies Herald to `~/.local/share/herald/program` and adds a `herald` command,
    - finds WoW Forever inside your Wine prefix and installs the addon (if it can't, paste the
      path to the `World of Warcraft` folder inside the prefix's `drive_c`),
    - asks for the **webhook URL** and sends a test message,
    - asks whether to start automatically when you log in. **Y** sets up a systemd user service.
-4. Restart WoW. Check that **First Kills** is ticked under *AddOns*, then type **`/fk`** in game.
+4. Restart WoW. Check that **Herald** is ticked under *AddOns*, then type **`/herald`** in game.
 
-**Commands:** `firstkills setup`, `firstkills start`, `firstkills stop`, `firstkills test`
-(posts sample cards), `firstkills list` (your recorded first kills).
-If `firstkills` isn't found, use `~/.local/bin/firstkills`.
+**Commands:** `herald setup`, `herald start`, `herald stop`, `herald test`
+(posts sample cards), `herald list` (your recorded first kills).
+If `herald` isn't found, use `~/.local/bin/herald`.
 
 **Updating:** extract the new zip and run `bash install.sh` again. Settings and history are kept.
 **Uninstalling:** `bash uninstall.sh`.
@@ -79,21 +79,21 @@ All features are the same on both. Only the setup differs:
 | | Windows | Linux (Wine / Proton) |
 |---|---|---|
 | Python | Included in the zip | Uses your system's `python3` (3.8+) |
-| Install / start | `Start FirstKills.bat` | `bash install.sh`, then the `firstkills` command |
+| Install / start | `Start Herald.bat` | `bash install.sh`, then the `herald` command |
 | Finds the game in | Battle.net's install location, and the usual folders on every drive | Heroic, Lutris, Steam (Proton), Bottles and `~/.wine` prefixes, including Flatpak versions |
 | Runs in the background | Hidden, starts with Windows (Startup folder) | systemd user service, starts when you log in |
-| Settings and history | `%APPDATA%\FirstKills` | `~/.config/wow-firstkills` and `~/.local/share/wow-firstkills` |
-| Background log | `%APPDATA%\FirstKills\watcher.log` | `journalctl --user -u wow-firstkills` |
+| Settings and history | `%APPDATA%\Herald` | `~/.config/herald` and `~/.local/share/herald` |
+| Background log | `%APPDATA%\Herald\watcher.log` | `journalctl --user -u herald` |
 | Tested | Under Wine only, not on a real Windows PC yet | Yes (Arch + Heroic), with test data |
 
 **Not supported:** macOS (the addon itself works, but the watcher is untested there), and
-Linux without systemd (it works, but you have to run `firstkills start` yourself each time).
+Linux without systemd (it works, but you have to run `herald start` yourself each time).
 On a **Steam Deck**, install it from Desktop Mode. Whether the background service also runs
 while you're in Game Mode hasn't been tested.
 
 ## Using it
 
-- In game, **`/fk`** shows whether combat logging is on and how long the session has run.
+- In game, **`/herald`** shows whether combat logging is on and how long the session has run.
 - **`/reload`** posts a progress report right away, if you've played 5+ minutes since the last one.
 - Several friends can use **the same webhook**. Everyone's cards go into one channel, and each card says whose kill it was.
 
@@ -108,13 +108,13 @@ You only need to edit it for these extras:
 - `wowhead_env`, `npc_url`, `item_url`, `search_url`: where mob info and links come from (default: Wowhead's Forever pages).
 - `player_url`: a link for enemy players, using `{name}` and `{realm}`. Empty means no link.
 
-Restart FirstKills after editing (stop, then start).
+Restart Herald after editing (stop, then start).
 
 ## Troubleshooting
 
-- **Nothing posts.** In game, type `/fk` and check it says ON. Make sure FirstKills is running
+- **Nothing posts.** In game, type `/herald` and check it says ON. Make sure Herald is running
   (start it again: it tells you if it's already running). Check the background log (see the table).
-- **"First Kills" is shown as *out of date* in the AddOns list.** Tick *Load out of date AddOns*.
+- **"Herald" is shown as *out of date* in the AddOns list.** Tick *Load out of date AddOns*.
 - **No level-up screenshot on the milestone card.** The game may block addons from taking
   screenshots. The card still posts without it.
 - **The Wowhead links don't open the right page.** Set `npc_url` to `https://www.wowhead.com/classic/npc={id}`.
@@ -135,25 +135,25 @@ Restart FirstKills after editing (stop, then start).
 ## For developers
 
 ```
-FirstKills/
-├── FirstKills.toc, FirstKills.lua   the addon
+Herald/
+├── Herald.toc, Herald.lua   the addon
 ├── watcher/
-│   ├── wow-firstkills.py            watches the combat log, setup wizard, posting
+│   ├── herald.py            watches the combat log, setup wizard, posting
 │   ├── progress.py                  milestone cards + progress reports from SavedVariables
-│   └── wow-firstkills.service       example systemd unit
+│   └── herald.service       example systemd unit
 └── build/
-    ├── package.sh                   builds dist/FirstKills-Windows.zip and -Linux.zip
+    ├── package.sh                   builds dist/Herald-Windows.zip and -Linux.zip
     └── linux/install.sh, uninstall.sh
 ```
 
 How it works: the addon keeps combat logging on and saves character snapshots plus milestones in
-`FirstKillsDB`. The watcher follows `_forever_/Logs/WoWCombatLog-*.txt` (PARTY_KILL, ENCOUNTER_END),
-reads `WTF/Account/*/SavedVariables/FirstKills.lua` whenever it changes, and posts Discord embeds to
+`HeraldDB`. The watcher follows `_forever_/Logs/WoWCombatLog-*.txt` (PARTY_KILL, ENCOUNTER_END),
+reads `WTF/Account/*/SavedVariables/Herald.lua` whenever it changes, and posts Discord embeds to
 the webhook. Wowhead provides the mob info, creature renders and icons.
 
-Development setup: symlink the addon folder into `_forever_/Interface/AddOns/FirstKills`, and run
-`watcher/wow-firstkills.py --dry-run` to print the cards instead of posting them, or
-`wow-firstkills.py test --dry-run` for sample cards.
+Development setup: symlink the addon folder into `_forever_/Interface/AddOns/Herald`, and run
+`watcher/herald.py --dry-run` to print the cards instead of posting them, or
+`herald.py test --dry-run` for sample cards.
 
-To release a new version, run `./release.sh FirstKills <version>` from the repository root
+To release a new version, run `./release.sh Herald <version>` from the repository root
 (see the main README).
