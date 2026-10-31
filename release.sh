@@ -4,8 +4,9 @@
 #   ./release.sh Herald 1.0.1
 #
 # Sets "## Version:" in the addon's .toc, builds its downloads (<Addon>/build/package.sh),
-# points the download links in the READMEs at the new release, commits, tags
-# "<Addon>-v<version>", pushes and creates the release with the zips attached.
+# points the download links in the READMEs and wiki/ at the new release, commits, tags
+# "<Addon>-v<version>", pushes, creates the release with the zips attached and
+# publishes the wiki.
 set -euo pipefail
 REPO=CrissZollo/wow-addons
 GH_USER=CrissZollo
@@ -23,7 +24,7 @@ git rev-parse -q --verify "refs/tags/$TAG" >/dev/null && { echo "$TAG already ex
 
 sed -i "s/^## Version: .*/## Version: $VERSION/" "$ADDON/$ADDON.toc"
 sed -i -E "s#releases/download/$ADDON-v[0-9][0-9.]*/#releases/download/$TAG/#g" \
-    README.md "$ADDON/README.md"
+    README.md "$ADDON/README.md" wiki/*.md
 "$ADDON/build/package.sh"
 
 if [ -n "$(git status --porcelain)" ]; then
@@ -43,3 +44,4 @@ Install guide: https://github.com/$REPO/tree/main/$ADDON#readme
 NOTES
 )"
 echo "released https://github.com/$REPO/releases/tag/$TAG"
+"$ROOT/publish-wiki.sh" || echo "(wiki not updated; run ./publish-wiki.sh later)"

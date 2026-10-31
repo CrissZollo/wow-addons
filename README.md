@@ -9,6 +9,8 @@ and follow its guide.
 
 All versions are on the [releases page](https://github.com/CrissZollo/wow-addons/releases).
 
+📖 **Step-by-step guides are in the [wiki](https://github.com/CrissZollo/wow-addons/wiki)**: installing on Windows and Linux, what each addon needs, the Discord webhook, and troubleshooting.
+
 ## Windows or Linux?
 
 - **Windows:** download the *Windows* file. Everything it needs is included.
@@ -33,5 +35,8 @@ prefix's `drive_c`). Then restart the game.
 - **Releasing:** commit your changes, then run `./release.sh <Addon> <version>`, e.g.
   `./release.sh Herald 1.0.1`. It bumps the version, builds the zips, updates the download
   links above, tags `<Addon>-v<version>`, pushes, and creates the GitHub release.
-- **Adding an addon:** create its folder, add a row to the table above (link format:
-  `releases/download/<Addon>-v<version>/<file>`), and give it a `build/package.sh` if it ships zips.
+- **Wiki:** the pages live in `wiki/` and are versioned with the code. Edit them there, then run
+  `./publish-wiki.sh`. `release.sh` also does this.
+- **Adding an addon:** create its folder, add a row to the table above and to `wiki/Home.md`, give it
+  a wiki page (and add it to `wiki/_Sidebar.md`). Download link format:
+  `releases/download/<Addon>-v<version>/<file>`. Give it a `build/package.sh` if it ships zips.
