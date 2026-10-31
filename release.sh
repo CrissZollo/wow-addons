@@ -20,6 +20,7 @@ cd "$ROOT"
 [ -f "$ADDON/$ADDON.toc" ] || { echo "no $ADDON/$ADDON.toc"; exit 1; }
 [ -x "$ADDON/build/package.sh" ] || { echo "no $ADDON/build/package.sh"; exit 1; }
 [ -z "$(git status --porcelain)" ] || { echo "commit or stash your changes first"; exit 1; }
+"$ROOT/check-wiki.py" || { echo "fix the format problems above first (templates/README.md)"; exit 1; }
 git rev-parse -q --verify "refs/tags/$TAG" >/dev/null && { echo "$TAG already exists"; exit 1; }
 
 sed -i "s/^## Version: .*/## Version: $VERSION/" "$ADDON/$ADDON.toc"

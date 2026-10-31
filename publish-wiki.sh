@@ -5,6 +5,7 @@ set -euo pipefail
 WIKI_REMOTE=git@github-crisszollo:CrissZollo/wow-addons.wiki.git
 WIKI_URL=https://github.com/CrissZollo/wow-addons/wiki
 ROOT=$(cd "$(dirname "$0")" && pwd)
+"$ROOT/check-wiki.py" || { echo "fix the format problems above first (templates/README.md)"; exit 1; }
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 

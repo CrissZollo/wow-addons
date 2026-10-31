@@ -37,6 +37,7 @@ prefix's `drive_c`). Then restart the game.
   links above, tags `<Addon>-v<version>`, pushes, and creates the GitHub release.
 - **Wiki:** the pages live in `wiki/` and are versioned with the code. Edit them there, then run
   `./publish-wiki.sh`. `release.sh` also does this.
-- **Adding an addon:** create its folder, add a row to the table above and to `wiki/Home.md`, give it
-  a wiki page (and add it to `wiki/_Sidebar.md`). Download link format:
-  `releases/download/<Addon>-v<version>/<file>`. Give it a `build/package.sh` if it ships zips.
+- **Adding an addon:** every addon follows the same format: folder layout, build script, wiki page
+  with fixed sections, and entries on the shared wiki pages. The checklist and templates are in
+  [`templates/`](templates/README.md). `./check-wiki.py` verifies it, and `release.sh` / `publish-wiki.sh`
+  won't run until it passes.

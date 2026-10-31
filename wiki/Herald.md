@@ -1,6 +1,8 @@
 # Herald
 
-Herald posts your adventures to a Discord channel as cards:
+Herald posts your WoW Forever adventures to the group's Discord channel: first kills, boss kills, level milestones and progress reports.
+
+## What it does
 
 | Card | What it shows | When it posts |
 |---|---|---|
@@ -13,15 +15,6 @@ Herald posts your adventures to a Discord channel as cards:
 Level cards and progress reports wait until you log out or `/reload` because that's the only time
 WoW lets addons save their data.
 
-## What you need
-
-| | Windows | Linux |
-|---|---|---|
-| WoW Forever | Installed through Battle.net | Installed through Battle.net inside Heroic, Lutris, Steam (Proton), Bottles or Wine |
-| Herald download | [Herald-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Windows.zip) | [Herald-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Linux.zip) |
-| Python | Nothing to install, it's included | `python3` 3.8 or newer, already installed on almost every distro (see [[Install on Linux]]) |
-| Discord webhook link | Ask whoever runs the channel ([[Discord Webhook]]) | Same |
-
 Herald has two parts, and both are set up by the installer:
 
 1. **The addon** inside WoW keeps combat logging on, saves your character's stats and gear, and screenshots milestone level-ups.
@@ -29,15 +22,34 @@ Herald has two parts, and both are set up by the installer:
    can't reach the internet on their own. **The helper must be running while you play**, which the
    installer sets up to happen automatically.
 
+## Download
+
+| Windows | Linux (Wine / Proton) |
+|---|---|
+| [Herald-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Windows.zip) | [Herald-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Linux.zip) |
+
+Older versions are on the [releases page](https://github.com/CrissZollo/wow-addons/releases).
+
+## What you need
+
+| | Windows | Linux |
+|---|---|---|
+| WoW Forever | Installed through Battle.net | Installed through Battle.net inside Heroic, Lutris, Steam (Proton), Bottles or Wine |
+| Python | Nothing to install, it's included | `python3` 3.8 or newer, already installed on almost every distro (see [[Install on Linux]]) |
+| Discord webhook link | Ask whoever runs the channel ([[Discord Webhook]]) | Same |
+
 ## Install
 
 - **Windows:** extract the zip somewhere permanent, double-click **Start Herald.bat**, paste the webhook link,
-  answer **Y** to autostart, and restart WoW. Step by step: [Install on Windows → Herald](Install-on-Windows#herald).
+  answer **Y** to autostart, and restart WoW. Step by step: [Install on Windows → Herald](Install-on-Windows#herald)
 - **Linux:** extract the zip, run `bash install.sh` in a terminal, paste the webhook link, answer **Y** to
-  autostart, and restart WoW. Step by step: [Install on Linux → Herald](Install-on-Linux#herald).
+  autostart, and restart WoW. Step by step: [Install on Linux → Herald](Install-on-Linux#herald)
 
-**Check that it works:** on the character screen, **Herald** should be ticked under *AddOns*. In game, type
-**`/herald`**: it should say *combat logging is ON*. Then kill something you've never killed on that character.
+## Check that it works
+
+1. On the character screen, **Herald** is ticked under *AddOns*.
+2. In game, `/herald` says *combat logging is ON*.
+3. Kill something you've never killed on that character. A card appears in Discord a few seconds later.
 
 ## Using it
 
