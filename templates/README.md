@@ -8,9 +8,13 @@ run until it passes.
 
 1. **Addon folder** `<Addon>/`, named exactly like its `.toc` file (`<Addon>/<Addon>.toc`) with `## Version: x.y.z`.
 2. **`<Addon>/README.md`** for the GitHub repository page (same sections as the wiki page is fine).
-3. **`<Addon>/build/package.sh`**, which writes the downloads to `<Addon>/dist/`:
-   - plain addon: copy `templates/package-plain.sh`, which makes `<Addon>.zip`,
-   - addon with a helper program: `<Addon>-Windows.zip` + `<Addon>-Linux.zip` (see `Herald/build/package.sh`).
+3. **`<Addon>/build/package.sh`**, which writes `<Addon>-Windows.zip` + `<Addon>-Linux.zip` to `<Addon>/dist/`.
+   Every download carries the Addon Updater (`updater/`, added by `add_updater` from `updater/bundle.sh`):
+   - plain addon: copy `templates/package-plain.sh`. Its installers copy the addon into the game and turn on updates,
+   - addon with a helper program: see `Herald/build/package.sh`. Its setup must run
+     `updater/updater.py install --addon <Addon> --program-dir <download folder>`, and list the program's
+     files in **`<Addon>/build/program-files`** so the updater keeps them current. The program should
+     restart itself when its files change (see `restart()` in `Herald/watcher/herald.py`).
 4. **Two wiki pages, one per language:**
    - `wiki/<Addon>.md` (English): copy `templates/en/wiki-addon-page.md`,
    - `wiki/<Addon>-på-svenska.md` (Swedish, titled `# <Addon> på svenska`): copy `templates/sv/wiki-addon-page.md`.
@@ -40,6 +44,15 @@ run until it passes.
    git add -A && git commit -m "Add <Addon>"
    ./release.sh <Addon> 1.0.0     # builds, tags, releases, updates download links, publishes the wiki
    ```
+
+## Automatic updates
+
+`release.sh` runs `updater/make-manifest.py`, which records the release in `updates.json`. For each addon it lists
+the in-game files (`*.toc`, `*.lua`, `*.xml` at the top of the addon folder, plus `media/`), the files in
+`build/program-files`, and the updater's own files, each with a SHA-256. Players' updaters read `updates.json`
+from `main` every 30 minutes and download changed files from the release tag. While WoW runs they only install
+updates that keep the same file list and `.toc` (apart from `## Version`); anything else waits until WoW closes.
+So adding a file to an addon is fine, it just reaches players after their next restart of the game.
 
 ## Languages
 

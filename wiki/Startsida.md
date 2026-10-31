@@ -19,12 +19,14 @@ vad du behöver och hur du får igång den på **Windows** och på **Linux**, d�
 2. **Kolla vad addonen behöver.** Varje addons sida har ett avsnitt *Det här behöver du*. Herald behöver till
    exempel Discord-webhook-länken från den som sköter kanalen. Se [[Webhook-länken]].
 3. **Ladda ner, följ guiden och starta om WoW.**
+4. **Klart.** Nya versioner installeras av sig själva, se [[Automatiska uppdateringar]].
 
 ## Alla sidor
 
 - [[Installera på Windows]]: installera addonsen på Windows
 - [[Installera på Linux]]: installera dem med Heroic, Lutris, Steam (Proton), Bottles eller Wine
 - [[Skillnader mellan Windows och Linux]]: det som fungerar olika på Windows och Linux
+- [[Automatiska uppdateringar]]: hur addonsen håller sig uppdaterade
 - [[Herald på svenska]]: Discord-utroparen: installation, kommandon, inställningar
 - [[Webhook-länken]]: för den som sköter Discord-kanalen
 - [[Felsökning]]: när något inte fungerar

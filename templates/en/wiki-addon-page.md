@@ -18,12 +18,6 @@
 |---|---|
 | [{Addon}-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/{Addon}-v{version}/{Addon}-Windows.zip) | [{Addon}-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/{Addon}-v{version}/{Addon}-Linux.zip) |
 
-<!-- Plain addon (one zip for both systems): use this table instead.
-| Windows and Linux |
-|---|
-| [{Addon}.zip](https://github.com/CrissZollo/wow-addons/releases/download/{Addon}-v{version}/{Addon}.zip) |
--->
-
 Older versions are on the [releases page](https://github.com/CrissZollo/wow-addons/releases).
 
 ## What you need
@@ -56,11 +50,11 @@ Older versions are on the [releases page](https://github.com/CrissZollo/wow-addo
 
 ## Updating
 
-{Plain addon: "Download the new zip and replace the addon's folder in `_forever_/Interface/AddOns`. Settings are kept."}
+Automatic: the Addon Updater installs new versions, see [[Automatic Updates]]. {Anything addon-specific, e.g. where the helper program lives.}
 
 ## Uninstalling
 
-{Plain addon: "Delete the addon's folder in `_forever_/Interface/AddOns`."}
+{Plain addon: "Delete the addon's folder in `_forever_/Interface/AddOns`. The Addon Updater then stops updating it ([[Automatic Updates]])."}
 
 ## Known limitations
 

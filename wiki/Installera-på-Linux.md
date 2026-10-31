@@ -15,12 +15,18 @@ På Linux körs WoW Forever via **Wine** eller **Proton**, med någon av de här
 Flatpak-versioner har sina prefix under `~/.var/app/...`, och Herald letar där också.
 Allt inne i spelet fungerar precis som på Windows: addons är bara filer i spelmappen.
 
+Du installerar varje addon en gång. Sedan håller den sig själv uppdaterad: se [[Automatiska uppdateringar]].
+Installationerna behöver `python3` version 3.8 eller nyare, som nästan alla distributioner redan har (se tabellen under *Herald* nedan).
+
 ## Vanliga addons (utan hjälpprogram)
 
-1. Ladda ner zip-filen och packa upp den.
-2. Kopiera addonens mapp till mappen `_forever_/Interface/AddOns/` från tabellen ovan
-   (skapa `Interface/AddOns` om den inte finns än).
+1. Ladda ner addonens **Linux**-zip och packa upp den.
+2. Öppna en terminal i den uppackade mappen och kör `bash install.sh`. Den hittar WoW Forever, lägger in addonen
+   i spelet och slår på [[Automatiska uppdateringar]]. Hittar den inte spelet frågar den efter sökvägen till mappen
+   `World of Warcraft`: använd tabellen ovan, med `World of Warcraft` i stället för `_forever_` på slutet.
 3. Starta om WoW och kolla att addonen är ibockad under **AddOns** på karaktärsskärmen.
+
+Du kan radera den uppackade mappen efteråt.
 
 ## Herald
 
@@ -43,7 +49,7 @@ Sedan:
    ```
 3. Installationen (texten är på engelska):
    1. kopierar Herald till `~/.local/share/herald/program` och lägger till kommandot `herald`,
-   2. hittar WoW Forever i din startares prefix och installerar addonen. Hittar den inte spelet frågar den efter
+   2. hittar WoW Forever i din startares prefix, installerar addonen och slår på [[Automatiska uppdateringar]]. Hittar den inte spelet frågar den efter
       sökvägen till mappen `World of Warcraft`: använd tabellen ovan, med `World of Warcraft` i stället för `_forever_` på slutet,
    3. frågar efter **webhook-länken** (*Webhook URL*, från den som sköter Discord-kanalen, se [[Webhook-länken]]) och skickar ett testmeddelande,
    4. frågar *"Start Herald automatically when you log in?"* ("Starta Herald automatiskt när du loggar in?"): svara **Y** så sätts den upp som en systemd-användartjänst.
@@ -52,7 +58,7 @@ Sedan:
 **Kommandon:** `herald start`, `herald stop`, `herald setup`, `herald test` (exempelkort), `herald list`.
 Om `herald` inte hittas, använd `~/.local/bin/herald`. Bakgrundslogg: `journalctl --user -u herald -f`.
 
-**Uppdatera:** packa upp den nya zip-filen och kör `bash install.sh` igen. **Avinstallera:** `bash uninstall.sh`.
+**Uppdatera:** sker automatiskt, se [[Automatiska uppdateringar]]. **Avinstallera:** `bash uninstall.sh`.
 
 **Steam Deck:** installera från **skrivbordsläget** (Desktop Mode; terminalen heter Konsole). Om bakgrundstjänsten
 fortsätter köra i spelläget (Game Mode) är inte testat än. Säg till om inga kort dyker upp där.

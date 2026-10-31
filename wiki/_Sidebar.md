@@ -7,6 +7,7 @@
 - [[Install on Windows]]
 - [[Install on Linux]]
 - [[Platform Differences]]
+- [[Automatic Updates]]
 - [[Discord Webhook]]
 - [[Troubleshooting]]
 
@@ -20,6 +21,7 @@
 - [[Installera på Windows]]
 - [[Installera på Linux]]
 - [[Skillnader mellan Windows och Linux]]
+- [[Automatiska uppdateringar]]
 - [[Webhook-länken]]
 - [[Felsökning]]
 

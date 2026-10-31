@@ -1,0 +1,9 @@
+# Herald's helper program files that the Addon Updater keeps up to date on players' PCs
+# (read by updater/make-manifest.py). The program folder is the extracted Windows download, or
+# ~/.local/share/herald/program on Linux.
+# <file in Herald/>     <where it goes in the program folder>
+watcher/herald.py       watcher/herald.py
+watcher/progress.py     watcher/progress.py
+# The copy of the addon that "Start Herald" puts into the game; keep it current too.
+Herald.toc              Herald/Herald.toc
+Herald.lua              Herald/Herald.lua

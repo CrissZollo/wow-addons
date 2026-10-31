@@ -2,8 +2,8 @@
 
 🇸🇪 [[Läs på svenska|Skillnader mellan Windows och Linux]]
 
-**Inside the game, every addon works the same on Windows and Linux.** Differences only show up in the helper
-programs some addons come with (currently: Herald).
+**Inside the game, every addon works the same on Windows and Linux.** Differences only show up in the programs
+on your PC: the helper programs some addons come with (currently: Herald), and the Addon Updater.
 
 ## Herald
 
@@ -19,8 +19,22 @@ programs some addons come with (currently: Herald).
 | Background log | `%APPDATA%\Herald\watcher.log` | `journalctl --user -u herald` |
 | Tested | Under Wine only, not on a real Windows PC yet | Arch Linux + Heroic, with test data |
 
+## Automatic updates
+
+| | Windows | Linux (Wine / Proton) |
+|---|---|---|
+| Python | Its own copy, in `%LOCALAPPDATA%\AddonUpdater\python` | Your system's `python3` (3.8+) |
+| Runs in the background | Hidden, starts with Windows (*Addon Updater* in the Startup folder) | systemd user service `addon-updater`, starts when you log in |
+| Program and log | `%LOCALAPPDATA%\AddonUpdater` | `~/.local/share/addon-updater` |
+| Notices that WoW is running | From the list of running programs | From the running Wine/Proton processes |
+| Tested | Not yet | Arch Linux, with a simulated game |
+
+More: [[Automatic Updates]].
+
 ## Not supported
 
 - **macOS:** the addon itself works, but the helper program has never been tried there.
-- **Linux without systemd:** Herald works, but it can't start automatically. Run `herald start` before playing.
+- **Linux without systemd:** Herald and the Addon Updater work, but can't start automatically. Run `herald start`
+  before playing. The updater runs from the install until you log out; start it again with
+  `python3 ~/.local/share/addon-updater/updater.py --background &`.
 - **Steam Deck Game Mode:** installing works (from Desktop Mode). Running in Game Mode is untested.

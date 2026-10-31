@@ -19,12 +19,14 @@ Older versions are on the [releases page](https://github.com/CrissZollo/wow-addo
 2. **Check what the addon needs.** Each addon's page has a *What you need* section. For example,
    Herald needs the Discord webhook link from whoever runs the channel. See [[Discord Webhook]].
 3. **Download, follow the guide, restart WoW.**
+4. **That's it.** New versions install themselves, see [[Automatic Updates]].
 
 ## All pages
 
 - [[Install on Windows]]: installing any of these addons on Windows
 - [[Install on Linux]]: installing them with Heroic, Lutris, Steam (Proton), Bottles or Wine
 - [[Platform Differences]]: what works differently between Windows and Linux
+- [[Automatic Updates]]: how the addons keep themselves up to date
 - [[Herald]]: the Discord announcer: setup, commands, settings
 - [[Discord Webhook]]: for the person running the Discord channel
 - [[Troubleshooting]]: when something doesn't work

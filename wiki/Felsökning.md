@@ -9,6 +9,16 @@
 | Addonen syns inte i AddOns-listan | Mappen måste ligga direkt i `_forever_/Interface/AddOns/` med sin `.toc`-fil i: `AddOns/Herald/Herald.toc`, inte `AddOns/Herald/Herald/Herald.toc`. Starta om spelet helt (`/reload` hittar inte nya addons) |
 | Addonen visas som *out of date* (inaktuell) | Bocka i **Load out of date AddOns** högst upp i AddOns-listan |
 
+## Automatiska uppdateringar
+
+| Problem | Lösning |
+|---|---|
+| En ny version kommer inte | Uppdateraren letar var 30:e minut. Titta i dess logg och status ([[Automatiska uppdateringar]]): där står vad den gjort, eller varför den inte nådde GitHub |
+| Statusen säger *waits until WoW closes* ("väntar tills WoW stängs") | Normalt: uppdateringen lägger till eller tar bort filer, och sådant märker WoW bara när det startar. Stäng WoW så installeras den några sekunder senare |
+| `/updates` säger att inget hålls uppdaterat, eller *Addon Updater* saknas i AddOns-listan | Kör addonens installation igen (*Start Herald.bat*, *Install &lt;Addon&gt;.bat* eller `bash install.sh`) |
+| Inget meddelande medan du spelar | Meddelandena under spelets gång är på försök och fungerar kanske inte i WoW Forever. Uppdateringarna installeras ändå, och meddelandet vid inloggning berättar om dem |
+| Du installerade Herald 1.0.0 | Version 1.0.0 kom före de automatiska uppdateringarna. Installera en nyare version en gång, på vanligt sätt |
+
 ## Herald
 
 | Problem | Lösning |

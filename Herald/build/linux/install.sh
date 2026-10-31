@@ -2,7 +2,8 @@
 # Herald installer for Linux (WoW Forever running through Wine / Proton).
 # Copies Herald to ~/.local/share/herald/program, adds the `herald` command,
 # then runs setup: finds the game, installs the addon, asks for the Discord
-# webhook and sets up autostart. Run it again to update.
+# webhook and sets up autostart. Setup also turns on the Addon Updater, which
+# keeps Herald up to date from then on.
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
 DEST=${XDG_DATA_HOME:-$HOME/.local/share}/herald/program
@@ -24,8 +25,8 @@ fi
 [ -x "$BIN/herald" ] && "$BIN/herald" stop >/dev/null 2>&1 || true
 
 mkdir -p "$DEST" "$BIN"
-rm -rf "$DEST/Herald" "$DEST/watcher"
-cp -r "$HERE/Herald" "$HERE/watcher" "$DEST/"
+rm -rf "$DEST/Herald" "$DEST/watcher" "$DEST/updater"
+cp -r "$HERE/Herald" "$HERE/watcher" "$HERE/updater" "$DEST/"
 chmod +x "$DEST/watcher/herald.py"
 ln -sf "$DEST/watcher/herald.py" "$BIN/herald"
 echo "Installed to $DEST"

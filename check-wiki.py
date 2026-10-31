@@ -35,7 +35,8 @@ LANGS = {
 PAIRS = [("Home", "Startsida"), ("Install on Windows", "Installera på Windows"),
          ("Install on Linux", "Installera på Linux"),
          ("Platform Differences", "Skillnader mellan Windows och Linux"),
-         ("Discord Webhook", "Webhook-länken"), ("Troubleshooting", "Felsökning")]
+         ("Discord Webhook", "Webhook-länken"), ("Troubleshooting", "Felsökning"),
+         ("Automatic Updates", "Automatiska uppdateringar")]
 
 
 def file_of(title):

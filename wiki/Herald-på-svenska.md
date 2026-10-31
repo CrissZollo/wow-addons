@@ -59,6 +59,7 @@ Herald består av två delar, och installationen sätter upp båda:
 |---|---|
 | `/herald` | Visar om stridsloggningen är på och hur länge sessionen har pågått |
 | `/reload` | Postar en framstegsrapport direkt, om du spelat 5+ minuter sedan förra |
+| `/updates` | Visar Heralds version (från Addon Updater, se [[Automatiska uppdateringar]]) |
 
 | På datorn | Windows | Linux |
 |---|---|---|
@@ -85,16 +86,25 @@ Du behöver bara ändra i den för de här extrasakerna. Starta om Herald efter�
 
 ## Uppdatera
 
-- **Windows:** kör *Stop Herald.bat*, ersätt mappen med den nya nedladdningen och kör sedan *Start Herald.bat*.
-- **Linux:** packa upp den nya zip-filen och kör `bash install.sh` igen.
+Sker automatiskt. Installationen slår på Addon Updater, som installerar nya versioner av addonen och av
+hjälpprogrammet inom 30 minuter efter en release, och startar om hjälpprogrammet av sig själv. I spelet ser du
+*Herald updated: … -> …* ("Herald uppdaterad") nästa gång du loggar in. Detaljer: [[Automatiska uppdateringar]].
 
-Dina inställningar och din historik finns kvar, och den nya addon-versionen kopieras in i spelet automatiskt.
+Låt Windows-mappen ligga kvar där du packade upp den: Herald körs därifrån, och uppdateraren håller den aktuell.
+Dina inställningar och din historik rörs aldrig.
+
+**Installerade du version 1.0.0?** Den kom före de automatiska uppdateringarna. Installera en nyare version en
+gång, på samma sätt som första gången (på Windows: *Stop Herald.bat*, ersätt mappen, *Start Herald.bat*). Sedan
+uppdaterar den sig själv.
 
 ## Avinstallera
 
 - **Windows:** kör `Herald Setup.bat` och svara **N** på frågan om autostart, kör `Stop Herald.bat`, radera mappen
-  och radera `Herald` i `_forever_\Interface\AddOns`. Inställningarna ligger i `%APPDATA%\Herald`.
-- **Linux:** kör `bash uninstall.sh` från nedladdningen och radera `Herald` i `_forever_/Interface/AddOns`.
+  och radera `Herald` i `_forever_\Interface\AddOns`. Inställningarna ligger i `%APPDATA%\Herald`. Addon Updater
+  slutar då uppdatera Herald. Var Herald din enda addon härifrån stänger den av sig själv, och du kan radera
+  `%LOCALAPPDATA%\AddonUpdater`.
+- **Linux:** kör `bash uninstall.sh` från nedladdningen (den stoppar också uppdateringarna) och radera `Herald` i
+  `_forever_/Interface/AddOns`.
 
 ## Kända begränsningar
 
@@ -102,4 +112,5 @@ Dina inställningar och din historik finns kvar, och den nya addon-versionen kop
 - Bara kills av dig eller din grupp räknas. Spelets stridslogg täcker bara det som händer nära dig.
 - Kort för fiendespelare saknar bild, eftersom spelets logg inte anger deras klass eller ras.
 - Bilderna på varelserna kommer från Wowhead och är troligen Classic-modellerna.
+- Meddelandet *type /reload* i spelet, för uppdateringar som kommer medan du spelar, är på försök ([[Automatiska uppdateringar]]).
 - Mer: [[Skillnader mellan Windows och Linux]] och [[Felsökning]].

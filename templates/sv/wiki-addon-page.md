@@ -18,12 +18,6 @@
 |---|---|
 | [{Addon}-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/{Addon}-v{version}/{Addon}-Windows.zip) | [{Addon}-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/{Addon}-v{version}/{Addon}-Linux.zip) |
 
-<!-- Vanlig addon (samma zip för båda systemen): använd den här tabellen i stället.
-| Windows och Linux |
-|---|
-| [{Addon}.zip](https://github.com/CrissZollo/wow-addons/releases/download/{Addon}-v{version}/{Addon}.zip) |
--->
-
 Äldre versioner finns på [releasesidan](https://github.com/CrissZollo/wow-addons/releases).
 
 ## Det här behöver du
@@ -56,11 +50,11 @@
 
 ## Uppdatera
 
-{Vanlig addon: "Ladda ner den nya zip-filen och ersätt addonens mapp i `_forever_/Interface/AddOns`. Inställningarna finns kvar."}
+Sker automatiskt: Addon Updater installerar nya versioner, se [[Automatiska uppdateringar]]. {Sådant som gäller just den här addonen, t.ex. var hjälpprogrammet ligger.}
 
 ## Avinstallera
 
-{Vanlig addon: "Radera addonens mapp i `_forever_/Interface/AddOns`."}
+{Vanlig addon: "Radera addonens mapp i `_forever_/Interface/AddOns`. Addon Updater slutar då uppdatera den ([[Automatiska uppdateringar]])."}
 
 ## Kända begränsningar
 

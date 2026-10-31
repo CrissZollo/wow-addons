@@ -10,7 +10,7 @@ Add each of these to the existing wiki pages in `wiki/`. Replace `{Addon}`, `{ve
 ```markdown
 | **{Addon}** | {What it does, one line} | [{Addon}-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/{Addon}-v{version}/{Addon}-Windows.zip) | [{Addon}-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/{Addon}-v{version}/{Addon}-Linux.zip) | [[{Addon}]] |
 ```
-For a plain addon, use the same `{Addon}.zip` link in both download columns.
+Plain addons have the same two downloads (`templates/package-plain.sh` builds both).
 
 ## _Sidebar.md: under **Addons**, in alphabetical order
 
@@ -20,11 +20,11 @@ For a plain addon, use the same `{Addon}.zip` link in both download columns.
 
 ## Install-on-Windows.md and Install-on-Linux.md: a section at the end of each
 
-Plain addon:
+Plain addon (Install-on-Windows.md; on Install-on-Linux.md link `{Addon}-Linux.zip`):
 ```markdown
 ## {Addon}
 
-{Addon} is a plain addon: follow *Plain addons* above with [{Addon}.zip](https://github.com/CrissZollo/wow-addons/releases/download/{Addon}-v{version}/{Addon}.zip).
+{Addon} is a plain addon: follow *Plain addons* above with [{Addon}-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/{Addon}-v{version}/{Addon}-Windows.zip).
 ```
 Addon with a helper program: numbered steps like the Herald section (download → extract → run → what the setup asks → restart WoW and check).
 

@@ -17,11 +17,11 @@ The same entries as `templates/en/wiki-snippets.md`, for the Swedish pages in `w
 
 ## Installera-på-Windows.md and Installera-på-Linux.md: a section at the end of each
 
-Plain addon:
+Plain addon (Installera-på-Windows.md; on Installera-på-Linux.md link `{Addon}-Linux.zip`):
 ```markdown
 ## {Addon}
 
-{Addon} är en vanlig addon: följ *Vanliga addons* ovan med [{Addon}.zip](https://github.com/CrissZollo/wow-addons/releases/download/{Addon}-v{version}/{Addon}.zip).
+{Addon} är en vanlig addon: följ *Vanliga addons* ovan med [{Addon}-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/{Addon}-v{version}/{Addon}-Windows.zip).
 ```
 Addon with a helper program: numbered steps like the Herald section. Quote the program's English texts and explain them in Swedish.
 

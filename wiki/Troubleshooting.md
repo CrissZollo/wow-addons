@@ -9,6 +9,16 @@
 | The addon isn't in the AddOns list | The folder must sit directly in `_forever_/Interface/AddOns/` with its `.toc` file inside: `AddOns/Herald/Herald.toc`, not `AddOns/Herald/Herald/Herald.toc`. Restart the game completely (`/reload` doesn't find new addons) |
 | The addon shows as *out of date* | Tick **Load out of date AddOns** at the top of the AddOns list |
 
+## Automatic updates
+
+| Problem | Fix |
+|---|---|
+| A new version doesn't arrive | The updater checks every 30 minutes. Look at its log and status ([[Automatic Updates]]): it says what it did, or why it couldn't reach GitHub |
+| The status says *waits until WoW closes* | Normal: that update adds or removes files, which WoW only notices when it starts. Close WoW and it installs a few seconds later |
+| `/updates` says nothing is kept up to date, or *Addon Updater* is missing from the AddOns list | Run the addon's installer again (*Start Herald.bat*, *Install &lt;Addon&gt;.bat* or `bash install.sh`) |
+| No message during play | The in-game messages during play are experimental and may not work in WoW Forever. Updates still install, and the login message tells you |
+| You installed Herald 1.0.0 | Version 1.0.0 came before automatic updates. Install a newer version once, the normal way |
+
 ## Herald
 
 | Problem | Fix |

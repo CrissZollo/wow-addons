@@ -15,12 +15,18 @@ On Linux, WoW Forever runs through **Wine** or **Proton**, using one of these la
 Flatpak versions keep their prefixes under `~/.var/app/...`. Herald looks there too.
 Everything inside the game works exactly like on Windows: addons are just files in the game folder.
 
+You install each addon once. After that it keeps itself up to date: see [[Automatic Updates]].
+The installers need `python3` 3.8 or newer, which almost every distro already has (see the table under *Herald* below).
+
 ## Plain addons (no helper program)
 
-1. Download the zip and extract it.
-2. Copy the addon's folder into the `_forever_/Interface/AddOns/` folder from the table above
-   (create `Interface/AddOns` if it doesn't exist yet).
+1. Download the addon's **Linux** zip and extract it.
+2. Open a terminal in the extracted folder and run `bash install.sh`. It finds WoW Forever, puts the addon in
+   the game and turns on [[Automatic Updates]]. If it can't find the game, it asks for the path to the
+   `World of Warcraft` folder: use the table above, with `World of Warcraft` instead of `_forever_` at the end.
 3. Restart WoW and check that the addon is ticked under **AddOns** on the character screen.
+
+You can delete the extracted folder afterwards.
 
 ## Herald
 
@@ -43,7 +49,7 @@ Then:
    ```
 3. The installer:
    1. copies Herald to `~/.local/share/herald/program` and adds the `herald` command,
-   2. finds WoW Forever in your launcher's prefix and installs the addon. If it can't, it asks for the path
+   2. finds WoW Forever in your launcher's prefix, installs the addon and turns on [[Automatic Updates]]. If it can't, it asks for the path
       to the `World of Warcraft` folder: use the table above, with `World of Warcraft` instead of `_forever_` at the end,
    3. asks for the **webhook link** (from whoever runs the Discord channel, see [[Discord Webhook]]) and sends a test message,
    4. asks *"Start Herald automatically when you log in?"*: answer **Y** to set it up as a systemd user service.
@@ -52,7 +58,7 @@ Then:
 **Commands:** `herald start`, `herald stop`, `herald setup`, `herald test` (sample cards), `herald list`.
 If `herald` isn't found, use `~/.local/bin/herald`. Background log: `journalctl --user -u herald -f`.
 
-**Updating:** extract the new zip and run `bash install.sh` again. **Uninstalling:** `bash uninstall.sh`.
+**Updating:** automatic, see [[Automatic Updates]]. **Uninstalling:** `bash uninstall.sh`.
 
 **Steam Deck:** install from **Desktop Mode** (Konsole is the terminal). Whether the background service keeps
 running in Game Mode hasn't been tested yet. If posts don't appear there, report it.

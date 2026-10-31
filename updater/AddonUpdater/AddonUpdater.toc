@@ -1,0 +1,8 @@
+## Interface: 16001
+## Version: 1.0.0
+## Title: Addon Updater
+## Notes: Tells you in game when the Addon Updater program on your PC has updated your addons.
+## SavedVariables: AddonUpdaterDB
+
+Managed.lua
+AddonUpdater.lua

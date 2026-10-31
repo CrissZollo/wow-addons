@@ -43,8 +43,9 @@ private link, so don't post it anywhere public.
 The other files in the folder: **Stop Herald.bat** stops it, and **Herald Setup.bat** lets
 you change the webhook, reinstall the addon, or turn autostart on or off.
 
-**Updating:** run *Stop Herald.bat*, replace the folder with the new download (same place),
-then run *Start Herald.bat*. It puts the new addon version in the game too. Your settings and history are kept.
+**Updating:** automatic. The setup turns on the Addon Updater, which installs new versions
+(into the game and into this folder) within 30 minutes of a release. Keep the folder where it is.
+See [Automatic Updates](https://github.com/CrissZollo/wow-addons/wiki/Automatic-Updates).
 
 ## Linux guide
 
@@ -69,8 +70,8 @@ For WoW Forever running through Wine or Proton (Heroic, Lutris, Steam, Bottles, 
 (posts sample cards), `herald list` (your recorded first kills).
 If `herald` isn't found, use `~/.local/bin/herald`.
 
-**Updating:** extract the new zip and run `bash install.sh` again. Settings and history are kept.
-**Uninstalling:** `bash uninstall.sh`.
+**Updating:** automatic, through the Addon Updater that the installer sets up.
+**Uninstalling:** `bash uninstall.sh` (it also stops the updates).
 
 ## Windows vs Linux
 
@@ -95,6 +96,7 @@ while you're in Game Mode hasn't been tested.
 
 - In game, **`/herald`** shows whether combat logging is on and how long the session has run.
 - **`/reload`** posts a progress report right away, if you've played 5+ minutes since the last one.
+- **`/updates`** shows Herald's version. New versions install themselves, and the game tells you at the next login.
 - Several friends can use **the same webhook**. Everyone's cards go into one channel, and each card says whose kill it was.
 
 ## Settings
@@ -143,6 +145,7 @@ Herald/
 │   └── herald.service       example systemd unit
 └── build/
     ├── package.sh                   builds dist/Herald-Windows.zip and -Linux.zip
+    ├── program-files                watcher files the Addon Updater keeps current
     └── linux/install.sh, uninstall.sh
 ```
 
@@ -150,6 +153,11 @@ How it works: the addon keeps combat logging on and saves character snapshots pl
 `HeraldDB`. The watcher follows `_forever_/Logs/WoWCombatLog-*.txt` (PARTY_KILL, ENCOUNTER_END),
 reads `WTF/Account/*/SavedVariables/Herald.lua` whenever it changes, and posts Discord embeds to
 the webhook. Wowhead provides the mob info, creature renders and icons.
+
+Automatic updates: `herald.py setup`/`start` run `updater/updater.py install --addon Herald
+--program-dir <download folder>` from the download (not from a repository checkout). The updater then
+replaces the addon, the files in `build/program-files` and itself on new releases, and the watcher
+restarts itself when its own files change (see `restart()` in `herald.py`).
 
 Development setup: symlink the addon folder into `_forever_/Interface/AddOns/Herald`, and run
 `watcher/herald.py --dry-run` to print the cards instead of posting them, or

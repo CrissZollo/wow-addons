@@ -20,6 +20,10 @@ Config and state: ~/.config/herald + ~/.local/share/herald (Linux),
   herald.py test         post sample messages to the webhook
   herald.py list         show recorded first kills
   add --dry-run to print the messages instead of posting them
+
+Setup and start also hand Herald to the Addon Updater shipped in the download
+(updater/updater.py), which keeps the addon and this program up to date. When it replaces
+these files, the running watcher restarts itself with the new version.
 """
 import csv
 import html
@@ -117,7 +121,9 @@ def save_raw_config(raw):
 
 
 def game_dir_candidates():
-    """Places where WoW Forever's _forever_ folder usually is."""
+    """Places where WoW Forever's _forever_ folder usually is.
+
+    updater/updater.py has a copy of this list; keep the two in step."""
     if IS_WIN:
         import winreg
         for key in (r"SOFTWARE\WOW6432Node\Blizzard Entertainment\World of Warcraft",
@@ -493,26 +499,30 @@ def newest_log(logs_dir):
 _lock_handle = None
 
 
-def acquire_lock():
+def acquire_lock(wait=0):
     """Only one watcher may run, or everything would be posted twice."""
     global _lock_handle
     if _lock_handle:
         return True
     LOCK_PATH.parent.mkdir(parents=True, exist_ok=True)
-    fh = open(LOCK_PATH, "a+")
-    try:
-        if IS_WIN:
-            import msvcrt
-            fh.seek(0)
-            msvcrt.locking(fh.fileno(), msvcrt.LK_NBLCK, 1)
-        else:
-            import fcntl
-            fcntl.flock(fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except OSError:
-        fh.close()
-        return False
-    _lock_handle = fh
-    return True
+    deadline = time.time() + wait
+    while True:
+        fh = open(LOCK_PATH, "a+")
+        try:
+            if IS_WIN:
+                import msvcrt
+                fh.seek(0)
+                msvcrt.locking(fh.fileno(), msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            _lock_handle = fh
+            return True
+        except OSError:
+            fh.close()
+            if time.time() >= deadline:
+                return False
+            time.sleep(0.5)
 
 
 def release_lock():
@@ -522,14 +532,42 @@ def release_lock():
         _lock_handle = None
 
 
+def own_files_stamp():
+    """Changes when the Addon Updater replaces this program's files."""
+    try:
+        return tuple(p.stat().st_mtime_ns for p in (SCRIPT, SCRIPT.with_name("progress.py")))
+    except OSError:
+        return None
+
+
+def restart(resume):
+    """Run the new version of Herald, carrying on in the combat log where this one stopped."""
+    log("Herald was updated; restarting with the new version")
+    release_lock()
+    os.environ["HERALD_RESUME"] = resume
+    args = [sys.executable, str(SCRIPT), *[a for a in sys.argv[1:] if a.startswith("--")]]
+    if not IS_WIN:
+        os.execv(sys.executable, args)  # same process: systemd keeps tracking it
+    if "--background" in sys.argv:
+        subprocess.Popen(args, cwd=str(SCRIPT.parent), creationflags=0x00000008 | 0x00000200,
+                         close_fds=True, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                         stderr=subprocess.DEVNULL)
+        sys.exit(0)
+    sys.exit(subprocess.call(args))  # in a console window: keep it open for the new version
+
+
 def watch(cfg, dry_run):
-    if not dry_run and not acquire_lock():
+    # Set by restart(): "<log path>\n<offset>" to carry on where the old version stopped.
+    resume = os.environ.pop("HERALD_RESUME", None)
+    resume_path, _, resume_pos = (resume or "").rpartition("\n")
+    if not dry_run and not acquire_lock(wait=20 if resume is not None else 0):
         log("Herald is already running (in the background or another window)")
         return False
     STOP_PATH.unlink(missing_ok=True)
     tracker = Tracker(cfg, load_state(), dry_run)
     reports = progress.Progress(cfg, post, lambda: tracker.state, REPORTS_PATH, dry_run)
     current, fh, buf = None, None, b""
+    stamp, changed_at = own_files_stamp(), None
     log(f"watching {cfg['logs_dir']} and {cfg['wtf_dir']}")
     # A log that already exists at startup is old news: skip its contents.
     # Any log that appears later is a new session: read it from the start.
@@ -539,13 +577,23 @@ def watch(cfg, dry_run):
             STOP_PATH.unlink(missing_ok=True)
             log("stopped")
             return True
+        now_stamp = own_files_stamp()
+        if now_stamp != stamp:
+            stamp, changed_at = now_stamp, time.time()
+        elif changed_at and time.time() - changed_at > 5:  # the updater has finished writing
+            pos = fh.tell() - len(buf) if fh else 0  # buf: a line not finished yet
+            if fh:
+                fh.close()
+            restart(f"{current or ''}\n{pos}")
         reports.check()
         latest = newest_log(cfg["logs_dir"])
         if latest and latest != current:
             if fh:
                 fh.close()
             fh = open(latest, "rb")
-            if latest == old_log and current is None:
+            if current is None and str(latest) == resume_path:
+                fh.seek(int(resume_pos or 0))
+            elif latest == old_log and current is None:
                 fh.seek(0, os.SEEK_END)
             current, buf = latest, b""
             tracker.me, tracker.encounter = None, None
@@ -604,11 +652,26 @@ def install_addon(game):
               f"    Copy the Herald folder into {dest.parent} yourself.")
 
 
+def register_updater(game):
+    """Hand Herald to the Addon Updater in this download, which keeps the addon and this
+    program up to date. Running from the repository (no updater/ next to watcher/): skip."""
+    updater = SCRIPT.parent.parent / "updater" / "updater.py"
+    if not updater.exists():
+        return
+    try:
+        subprocess.run([sys.executable, str(updater), "install", "--addon", "Herald",
+                        "--program-dir", str(SCRIPT.parent.parent), "--game", str(game)],
+                       timeout=300)
+    except (OSError, subprocess.SubprocessError) as e:
+        print(f"  ! couldn't turn on automatic updates ({e})")
+
+
 def refresh_addon():
     raw = read_raw_config()
     game = Path(raw["logs_dir"]).expanduser().parent if raw.get("logs_dir") else find_game_dir()
     if game and is_game_dir(game):
         install_addon(game)
+        register_updater(game)
 
 
 def setup(cfg_dry_run=False):
@@ -634,6 +697,7 @@ def setup(cfg_dry_run=False):
     print(f"  ✓ game found: {game}")
     raw["logs_dir"] = str(game / "Logs")
     install_addon(game)
+    register_updater(game)
 
     # 2. the webhook
     current = raw.get("webhook_url", "")

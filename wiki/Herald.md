@@ -59,6 +59,7 @@ Older versions are on the [releases page](https://github.com/CrissZollo/wow-addo
 |---|---|
 | `/herald` | Shows whether combat logging is on and how long the session has run |
 | `/reload` | Posts a progress report right away, if you've played 5+ minutes since the last one |
+| `/updates` | Shows Herald's version (from the Addon Updater, see [[Automatic Updates]]) |
 
 | On your PC | Windows | Linux |
 |---|---|---|
@@ -85,16 +86,24 @@ You only need to edit it for these extras. Restart Herald afterwards.
 
 ## Updating
 
-- **Windows:** run *Stop Herald.bat*, replace the folder with the new download, then run *Start Herald.bat*.
-- **Linux:** extract the new zip and run `bash install.sh` again.
+Automatic. The installer turns on the Addon Updater, which installs new versions of the addon and of the
+helper program within 30 minutes of a release, and restarts the helper program by itself. In game you see
+*Herald updated: … -> …* at your next login. Details: [[Automatic Updates]].
 
-Your settings and history are kept, and the new addon version is copied into the game automatically.
+Keep the Windows folder where you extracted it: Herald runs from there, and the updater keeps it current.
+Your settings and history are never touched.
+
+**Installed version 1.0.0?** It came before automatic updates. Install a newer version once, the same way as
+the first time (on Windows: *Stop Herald.bat*, replace the folder, *Start Herald.bat*). From then on it updates itself.
 
 ## Uninstalling
 
 - **Windows:** run `Herald Setup.bat` and answer **N** to autostart, run `Stop Herald.bat`, delete the folder,
-  and delete `Herald` in `_forever_\Interface\AddOns`. Settings are in `%APPDATA%\Herald`.
-- **Linux:** run `bash uninstall.sh` from the download, and delete `Herald` in `_forever_/Interface/AddOns`.
+  and delete `Herald` in `_forever_\Interface\AddOns`. Settings are in `%APPDATA%\Herald`. The Addon Updater
+  then stops updating Herald. If Herald was your only addon from here, it switches itself off, and you can
+  delete `%LOCALAPPDATA%\AddonUpdater`.
+- **Linux:** run `bash uninstall.sh` from the download (it also stops the updates), and delete `Herald` in
+  `_forever_/Interface/AddOns`.
 
 ## Known limitations
 
@@ -102,4 +111,5 @@ Your settings and history are kept, and the new addon version is copied into the
 - Only kills by you or your group count. The game's combat log only covers what happens near you.
 - Enemy player cards have no picture, because the game's log doesn't say their class or race.
 - Creature pictures come from Wowhead and are probably the Classic models.
+- The in-game *type /reload* message for updates that arrive while you play is experimental ([[Automatic Updates]]).
 - More: [[Platform Differences]] and [[Troubleshooting]].
