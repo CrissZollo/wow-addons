@@ -15,6 +15,8 @@ GH_USER=CrissZollo
 ADDON=${1:?usage: ./release.sh <Addon> <version>}
 VERSION=${2:?usage: ./release.sh <Addon> <version> [notes]}
 NOTES=${3:-}
+WHATSNEW=  # built here: bash can't parse an apostrophe inside ${x:+...} in the heredoc below
+[ -n "$NOTES" ] && WHATSNEW="**What's new:** $NOTES"$'\n\n'
 TAG="$ADDON-v$VERSION"
 ROOT=$(cd "$(dirname "$0")" && pwd)
 cd "$ROOT"
@@ -40,9 +42,7 @@ git push -q origin HEAD "$TAG"
 
 GH_TOKEN=$(gh auth token --user "$GH_USER") gh release create "$TAG" --repo "$REPO" \
     --title "$ADDON $VERSION" "$ADDON"/dist/*.zip --notes "$(cat <<NOTES
-${NOTES:+**What's new:** $NOTES
-
-}Already installed? The Addon Updater installs this version for you within 30 minutes.
+${WHATSNEW}Already installed? The Addon Updater installs this version for you within 30 minutes.
 
 **Download** the file for your system below (under *Assets*):
 
