@@ -11,23 +11,46 @@ run until it passes.
 3. **`<Addon>/build/package.sh`**, which writes the downloads to `<Addon>/dist/`:
    - plain addon: copy `templates/package-plain.sh`, which makes `<Addon>.zip`,
    - addon with a helper program: `<Addon>-Windows.zip` + `<Addon>-Linux.zip` (see `Herald/build/package.sh`).
-4. **Wiki page `wiki/<Addon>.md`:** copy `templates/wiki-addon-page.md` and fill it in.
-   Keep **all** the `##` sections in the same order, even when one only says "None.":
-   `What it does` → `Download` → `What you need` → `Install` → `Check that it works` → `Using it` →
-   `Settings` → `Updating` → `Uninstalling` → `Known limitations`.
-5. **Snippets in the shared wiki pages** (`templates/wiki-snippets.md` has them ready to paste):
-   - `wiki/Home.md`: a row in *The addons* table,
-   - `wiki/_Sidebar.md`: `- [[<Addon>]]` under **Addons**,
-   - `wiki/Install-on-Windows.md` and `wiki/Install-on-Linux.md`: a `## <Addon>` section,
-   - `wiki/Platform-Differences.md`: a `## <Addon>` section (or "No differences"),
-   - `wiki/Troubleshooting.md`: a `## <Addon>` section (or "No known problems yet."),
-   - the root `README.md`: a row in the addons table.
+4. **Two wiki pages, one per language:**
+   - `wiki/<Addon>.md` (English): copy `templates/en/wiki-addon-page.md`,
+   - `wiki/<Addon>-på-svenska.md` (Swedish, titled `# <Addon> på svenska`): copy `templates/sv/wiki-addon-page.md`.
+
+   Keep **all** the `##` sections in the same order, even when one only says "None." / "Inga.":
+   English `What it does` → `Download` → `What you need` → `Install` → `Check that it works` → `Using it` →
+   `Settings` → `Updating` → `Uninstalling` → `Known limitations`. Swedish `Vad den gör` → `Ladda ner` →
+   `Det här behöver du` → `Installera` → `Kolla att det fungerar` → `Så använder du den` → `Inställningar` →
+   `Uppdatera` → `Avinstallera` → `Kända begränsningar`.
+   Each page links to the other language right under its title (the templates already do).
+5. **Entries in the shared wiki pages, in both languages** (ready to paste: `templates/en/wiki-snippets.md`
+   and `templates/sv/wiki-snippets.md`):
+
+   | English page | Swedish page | Entry |
+   |---|---|---|
+   | `Home.md` | `Startsida.md` | a row in the addons table |
+   | `_Sidebar.md` | `_Sidebar.md` | `- [[<Addon>]]` under English, `- [[<Addon> på svenska]]` under Svenska |
+   | `Install-on-Windows.md` | `Installera-på-Windows.md` | a `## <Addon>` section |
+   | `Install-on-Linux.md` | `Installera-på-Linux.md` | a `## <Addon>` section |
+   | `Platform-Differences.md` | `Skillnader-mellan-Windows-och-Linux.md` | a `## <Addon>` section (or "No differences" / "Inga skillnader") |
+   | `Troubleshooting.md` | `Felsökning.md` | a `## <Addon>` section (or "No known problems yet." / "Inga kända problem än.") |
+
+   Plus a row in the addons table of the repository's root `README.md`.
 6. **Check, commit and release:**
    ```sh
    ./check-wiki.py
    git add -A && git commit -m "Add <Addon>"
    ./release.sh <Addon> 1.0.0     # builds, tags, releases, updates download links, publishes the wiki
    ```
+
+## Languages
+
+The wiki is in **English and Swedish**. Every page exists in both languages with the same structure, and
+starts with a link to its counterpart: `🇸🇪 [[Läs på svenska|<Swedish page>]]` on English pages,
+`🇬🇧 [[Read in English|<English page>]]` on Swedish pages. When you change one language, change the other
+one too. When you add a new shared page, add it in both languages, put both in `_Sidebar.md`, and add the
+pair to `PAIRS` in `check-wiki.py`.
+
+The programs themselves (setup texts, Discord cards) are in English. Swedish guides quote those
+English texts and explain them in Swedish.
 
 ## Writing style
 

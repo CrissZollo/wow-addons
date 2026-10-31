@@ -1,5 +1,7 @@
 # Troubleshooting
 
+🇸🇪 [[Läs på svenska|Felsökning]]
+
 ## Any addon
 
 | Problem | Fix |

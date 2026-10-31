@@ -1,4 +1,6 @@
-# Wiki snippets for a new addon
+# Wiki snippets for a new addon (English pages)
+
+The Swedish pages need the same entries: see `templates/sv/wiki-snippets.md`.
 
 Add each of these to the existing wiki pages in `wiki/`. Replace `{Addon}`, `{version}` and the text in braces.
 `check-wiki.py` verifies that all of them are present.

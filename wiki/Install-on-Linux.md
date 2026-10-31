@@ -1,5 +1,7 @@
 # Install on Linux
 
+🇸🇪 [[Läs på svenska|Installera på Linux]]
+
 On Linux, WoW Forever runs through **Wine** or **Proton**, using one of these launchers:
 
 | Launcher | Get it | Where the game ends up (`_forever_` folder) |

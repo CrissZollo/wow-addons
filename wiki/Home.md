@@ -1,5 +1,7 @@
 # WoW addons for World of Warcraft: Forever
 
+🇸🇪 [[Läs på svenska|Startsida]]
+
 Addons made for our group. Each one is free to download. This wiki explains what each addon does,
 what you need, and how to get it working on **Windows** and on **Linux**, where WoW runs through Wine or Proton.
 

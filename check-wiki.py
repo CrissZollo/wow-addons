@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Check that every addon follows the standard wiki/repository format (see templates/README.md).
 
+The wiki exists in English and Swedish. Every page has a counterpart in the other language,
+linked at the top, and every addon needs a page and the same entries in both languages.
 Exit code 0 when everything is in place, 1 with a list of problems otherwise.
 """
 import re
@@ -9,15 +11,35 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 WIKI = ROOT / "wiki"
-SECTIONS = ["What it does", "Download", "What you need", "Install", "Check that it works",
-            "Using it", "Settings", "Updating", "Uninstalling", "Known limitations"]
-SHARED_SECTIONS = ["Install-on-Windows.md", "Install-on-Linux.md",
-                   "Platform-Differences.md", "Troubleshooting.md"]
+
+LANGS = {
+    "en": {
+        "home": "Home",
+        "addon_page": "{addon}",
+        "switch": "Läs på svenska",       # link text pointing to the other language
+        "sections": ["What it does", "Download", "What you need", "Install", "Check that it works",
+                     "Using it", "Settings", "Updating", "Uninstalling", "Known limitations"],
+        "shared": ["Install on Windows", "Install on Linux", "Platform Differences", "Troubleshooting"],
+    },
+    "sv": {
+        "home": "Startsida",
+        "addon_page": "{addon} på svenska",
+        "switch": "Read in English",
+        "sections": ["Vad den gör", "Ladda ner", "Det här behöver du", "Installera", "Kolla att det fungerar",
+                     "Så använder du den", "Inställningar", "Uppdatera", "Avinstallera", "Kända begränsningar"],
+        "shared": ["Installera på Windows", "Installera på Linux", "Skillnader mellan Windows och Linux",
+                   "Felsökning"],
+    },
+}
+# Shared pages that exist once per language, as (English, Swedish) pairs.
+PAIRS = [("Home", "Startsida"), ("Install on Windows", "Installera på Windows"),
+         ("Install on Linux", "Installera på Linux"),
+         ("Platform Differences", "Skillnader mellan Windows och Linux"),
+         ("Discord Webhook", "Webhook-länken"), ("Troubleshooting", "Felsökning")]
 
 
-def addons():
-    return sorted(d.name for d in ROOT.iterdir()
-                  if d.is_dir() and (d / f"{d.name}.toc").exists())
+def file_of(title):
+    return WIKI / (title.replace(" ", "-") + ".md")
 
 
 def read(path):
@@ -29,51 +51,75 @@ def headings(text, level):
     return [line[len(marker):].strip() for line in text.splitlines() if line.startswith(marker)]
 
 
-def check(addon):
+def addons():
+    return sorted(d.name for d in ROOT.iterdir()
+                  if d.is_dir() and (d / f"{d.name}.toc").exists())
+
+
+def check_switch(title, other_title, lang):
+    """The page links to the same page in the other language near the top."""
+    text = read(file_of(title))
+    if text is None:
+        return [f"wiki/{file_of(title).name} is missing"]
+    top = "\n".join(text.splitlines()[:5])
+    if f"[[{LANGS[lang]['switch']}|{other_title}]]" not in top:
+        return [f"wiki/{file_of(title).name} needs '[[{LANGS[lang]['switch']}|{other_title}]]' under its title"]
+    return []
+
+
+def check_addon(addon):
     problems = []
     if not re.search(r"^## Version: *\d", read(ROOT / addon / f"{addon}.toc") or "", re.M):
         problems.append(f"{addon}/{addon}.toc has no '## Version: x.y.z'")
-    if not (ROOT / addon / "README.md").exists():
-        problems.append(f"{addon}/README.md is missing")
-    if not (ROOT / addon / "build" / "package.sh").exists():
-        problems.append(f"{addon}/build/package.sh is missing (see templates/package-plain.sh)")
-
-    page = read(WIKI / f"{addon}.md")
-    if page is None:
-        problems.append(f"wiki/{addon}.md is missing (copy templates/wiki-addon-page.md)")
-    else:
-        if not page.startswith(f"# {addon}\n"):
-            problems.append(f"wiki/{addon}.md must start with '# {addon}'")
-        if headings(page, 2) != SECTIONS:
-            problems.append(f"wiki/{addon}.md sections must be exactly, in order: {', '.join(SECTIONS)}"
-                            f"\n      found: {', '.join(headings(page, 2)) or 'none'}")
-        if f"releases/download/{addon}-v" not in page:
-            problems.append(f"wiki/{addon}.md has no versioned download link")
-        if "{" in page and re.search(r"\{(Addon|version|addon-lowercase)\}", page):
-            problems.append(f"wiki/{addon}.md still has template placeholders")
-
-    row = re.compile(rf"^\| \*\*{re.escape(addon)}\*\* \|", re.M)
-    if not row.search(read(WIKI / "Home.md") or ""):
-        problems.append(f"wiki/Home.md has no '| **{addon}** |' row")
-    if not row.search(read(ROOT / "README.md") or ""):
+    for f in ("README.md", "build/package.sh"):
+        if not (ROOT / addon / f).exists():
+            problems.append(f"{addon}/{f} is missing")
+    if not re.search(rf"^\| \*\*{re.escape(addon)}\*\* \|", read(ROOT / "README.md") or "", re.M):
         problems.append(f"README.md has no '| **{addon}** |' row")
-    if f"[[{addon}]]" not in (read(WIKI / "_Sidebar.md") or ""):
-        problems.append(f"wiki/_Sidebar.md has no '- [[{addon}]]'")
-    for name in SHARED_SECTIONS:
-        if addon not in headings(read(WIKI / name) or "", 2):
-            problems.append(f"wiki/{name} has no '## {addon}' section")
+
+    sidebar = read(WIKI / "_Sidebar.md") or ""
+    for lang, cfg in LANGS.items():
+        title = cfg["addon_page"].format(addon=addon)
+        page = read(file_of(title))
+        name = file_of(title).name
+        if page is None:
+            problems.append(f"wiki/{name} is missing (template: templates/{lang}/wiki-addon-page.md)")
+        else:
+            if not page.startswith(f"# {title}\n"):
+                problems.append(f"wiki/{name} must start with '# {title}'")
+            if headings(page, 2) != cfg["sections"]:
+                problems.append(f"wiki/{name} sections must be exactly, in order: {', '.join(cfg['sections'])}"
+                                f"\n      found: {', '.join(headings(page, 2)) or 'none'}")
+            if f"releases/download/{addon}-v" not in page:
+                problems.append(f"wiki/{name} has no versioned download link")
+            if re.search(r"\{(Addon|version|addon-lowercase)\}", page):
+                problems.append(f"wiki/{name} still has template placeholders")
+        other_lang = "sv" if lang == "en" else "en"
+        problems += check_switch(title, LANGS[other_lang]["addon_page"].format(addon=addon), lang)
+
+        if not re.search(rf"^\| \*\*{re.escape(addon)}\*\* \|", read(file_of(cfg["home"])) or "", re.M):
+            problems.append(f"wiki/{file_of(cfg['home']).name} has no '| **{addon}** |' row")
+        if f"[[{title}]]" not in sidebar:
+            problems.append(f"wiki/_Sidebar.md has no '- [[{title}]]'")
+        for shared in cfg["shared"]:
+            if addon not in headings(read(file_of(shared)) or "", 2):
+                problems.append(f"wiki/{file_of(shared).name} has no '## {addon}' section")
     return problems
 
 
 def main():
+    problems = []
+    for en, sv in PAIRS:
+        problems += check_switch(en, sv, "en") + check_switch(sv, en, "sv")
     found = addons()
-    problems = [p for a in found for p in check(a)]
+    for addon in found:
+        problems += check_addon(addon)
     if problems:
         print("Wiki/repository format problems (see templates/README.md):")
         for p in problems:
             print(f"  - {p}")
         return 1
-    print(f"format OK for: {', '.join(found)}")
+    print(f"format OK (English + Swedish) for: {', '.join(found)}")
     return 0
 
 

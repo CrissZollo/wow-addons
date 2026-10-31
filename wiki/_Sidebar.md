@@ -1,15 +1,31 @@
-**[[Home]]**
+🌐 **Language / Språk:** [[English|Home]] · [[Svenska|Startsida]]
 
-**Install**
+---
+
+**🇬🇧 English**
+- [[Home]]
 - [[Install on Windows]]
 - [[Install on Linux]]
 - [[Platform Differences]]
-
-**Addons**
-- [[Herald]]
-
-**Help**
 - [[Discord Webhook]]
 - [[Troubleshooting]]
 
-[⬇ All downloads](https://github.com/CrissZollo/wow-addons/releases)
+*Addons*
+- [[Herald]]
+
+---
+
+**🇸🇪 Svenska**
+- [[Startsida]]
+- [[Installera på Windows]]
+- [[Installera på Linux]]
+- [[Skillnader mellan Windows och Linux]]
+- [[Webhook-länken]]
+- [[Felsökning]]
+
+*Addons*
+- [[Herald på svenska]]
+
+---
+
+[⬇ Downloads / Nedladdningar](https://github.com/CrissZollo/wow-addons/releases)

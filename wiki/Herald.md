@@ -1,5 +1,7 @@
 # Herald
 
+🇸🇪 [[Läs på svenska|Herald på svenska]]
+
 Herald posts your WoW Forever adventures to the group's Discord channel: first kills, boss kills, level milestones and progress reports.
 
 ## What it does

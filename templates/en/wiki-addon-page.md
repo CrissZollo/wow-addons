@@ -1,5 +1,7 @@
 # {Addon}
 
+🇸🇪 [[Läs på svenska|{Addon} på svenska]]
+
 {One sentence for players: what the addon does.}
 
 ## What it does

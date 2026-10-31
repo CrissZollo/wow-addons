@@ -1,5 +1,7 @@
 # Platform differences
 
+🇸🇪 [[Läs på svenska|Skillnader mellan Windows och Linux]]
+
 **Inside the game, every addon works the same on Windows and Linux.** Differences only show up in the helper
 programs some addons come with (currently: Herald).
 

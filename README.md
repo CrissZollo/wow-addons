@@ -10,6 +10,7 @@ and follow its guide.
 All versions are on the [releases page](https://github.com/CrissZollo/wow-addons/releases).
 
 📖 **Step-by-step guides are in the [wiki](https://github.com/CrissZollo/wow-addons/wiki)**: installing on Windows and Linux, what each addon needs, the Discord webhook, and troubleshooting.
+🇸🇪 **[Wikin på svenska](https://github.com/CrissZollo/wow-addons/wiki/Startsida)**: samma guider på svenska.
 
 ## Windows or Linux?
 

@@ -1,5 +1,7 @@
 # Discord webhook
 
+🇸🇪 [[Läs på svenska|Webhook-länken]]
+
 Addons that post to Discord (like [[Herald]]) need a **webhook link**: a private address that lets a program
 post messages into one specific channel. One person, whoever runs the Discord server, makes it once and
 shares it with the group.

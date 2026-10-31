@@ -1,5 +1,7 @@
 # Install on Windows
 
+🇸🇪 [[Läs på svenska|Installera på Windows]]
+
 ## What you need
 
 - **World of Warcraft: Forever**, installed with the [Battle.net app](https://download.battle.net/en-us/desktop).
