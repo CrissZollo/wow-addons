@@ -15,6 +15,7 @@ Config and state: ~/.config/wow-firstkills + ~/.local/share/wow-firstkills (Linu
   wow-firstkills.py setup        find the game, install the addon, set the webhook
   wow-firstkills.py start        setup if needed, then watch (what Start FirstKills.bat runs)
   wow-firstkills.py stop         stop a watcher running in the background
+  wow-firstkills.py install-addon  copy the addon into the game again (after an update)
   wow-firstkills.py autostart on|off   start with Windows (Windows only)
   wow-firstkills.py test         post sample messages to the webhook
   wow-firstkills.py list         show recorded first kills
@@ -25,6 +26,7 @@ import html
 import json
 import os
 import re
+import shutil
 import string
 import subprocess
 import sys
@@ -132,11 +134,22 @@ def game_dir_candidates():
                 for sub in ("Program Files (x86)", "Program Files", "Games", "Blizzard", ""):
                     yield Path(f"{drive}:\\") / sub / "World of Warcraft" / "_forever_"
     else:
+        # Wine prefixes of the usual Linux launchers (native and Flatpak installs).
         home = Path.home()
-        yield from home.glob("Games/Heroic/Prefixes/*/*/drive_c/Program Files (x86)/"
-                             "World of Warcraft/_forever_")
-        yield from home.glob("Games/*/drive_c/Program Files (x86)/World of Warcraft/_forever_")
-        yield home / ".wine/drive_c/Program Files (x86)/World of Warcraft/_forever_"
+        prefixes = [
+            "Games/Heroic/Prefixes/*/*", "Games/Heroic/Prefixes/*",            # Heroic
+            "Games/*", "Games/*/*",                                             # Lutris & co.
+            ".local/share/Steam/steamapps/compatdata/*/pfx",                   # Steam / Proton
+            ".steam/steam/steamapps/compatdata/*/pfx",
+            ".var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/compatdata/*/pfx",
+            ".local/share/bottles/bottles/*",                                  # Bottles
+            ".var/app/com.usebottles.bottles/data/bottles/bottles/*",
+            ".var/app/net.lutris.Lutris/data/lutris/prefixes/*",
+            ".wine",
+        ]
+        for prefix in prefixes:
+            for pf in ("Program Files (x86)", "Program Files"):
+                yield from home.glob(f"{prefix}/drive_c/{pf}/World of Warcraft/_forever_")
 
 
 def is_game_dir(p):
@@ -591,6 +604,13 @@ def install_addon(game):
               f"    Copy the FirstKills folder into {dest.parent} yourself.")
 
 
+def refresh_addon():
+    raw = read_raw_config()
+    game = Path(raw["logs_dir"]).expanduser().parent if raw.get("logs_dir") else find_game_dir()
+    if game and is_game_dir(game):
+        install_addon(game)
+
+
 def setup(cfg_dry_run=False):
     print("\n=== FirstKills setup ===\n")
     if IS_WIN and "\\AppData\\Local\\Temp\\" in str(SCRIPT):
@@ -637,9 +657,9 @@ def setup(cfg_dry_run=False):
     print("  ✓ test message sent, check Discord" if ok else "  ! sending the test message failed")
 
     # 3. autostart
-    if IS_WIN:
-        yes = ask("\nStart FirstKills automatically when Windows starts? [Y/n]: ", "y").lower()
-        set_autostart(not yes.startswith("n"))
+    when = "Windows starts" if IS_WIN else "you log in"
+    yes = ask(f"\nStart FirstKills automatically when {when}? [Y/n]: ", "y").lower()
+    set_autostart(not yes.startswith("n"))
     print("\nSetup done. In game, type /fk to check that combat logging is ON.\n")
     return True
 
@@ -650,6 +670,8 @@ def startup_dir():
 
 
 def autostart_enabled():
+    if not IS_WIN:
+        return unit_path().exists()
     return any((startup_dir() / n).exists() for n in ("FirstKills.lnk", "FirstKills.bat"))
 
 
@@ -659,10 +681,48 @@ def pythonw():
     return w if w.exists() else exe
 
 
+STOP_HINT = "run 'Stop FirstKills.bat'" if IS_WIN else "run: firstkills stop"
+UNIT = "wow-firstkills"
+
+
+def unit_path():
+    return (Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
+            / "systemd" / "user" / f"{UNIT}.service")
+
+
+def systemctl(*args):
+    try:
+        return subprocess.run(["systemctl", "--user", *args], capture_output=True, text=True,
+                              timeout=30).returncode == 0
+    except (OSError, subprocess.SubprocessError):
+        return False
+
+
+def set_autostart_linux(on):
+    if not shutil.which("systemctl"):
+        print("  ! no systemd here; start FirstKills yourself before playing (firstkills start)")
+        return
+    if not on:
+        systemctl("disable", "--now", UNIT)
+        unit_path().unlink(missing_ok=True)
+        systemctl("daemon-reload")
+        print("  ✓ autostart off")
+        return
+    unit_path().parent.mkdir(parents=True, exist_ok=True)
+    unit_path().write_text(
+        "[Unit]\nDescription=Post WoW first kills and progress to Discord (FirstKills)\n\n"
+        f'[Service]\nExecStart="{sys.executable}" "{SCRIPT}"\n'
+        "Restart=on-failure\nRestartSec=10\n\n[Install]\nWantedBy=default.target\n",
+        encoding="utf-8")
+    if systemctl("daemon-reload") and systemctl("enable", UNIT):
+        print("  ✓ FirstKills will start automatically when you log in (systemd user service)")
+    else:
+        print("  ! couldn't enable the systemd user service; start FirstKills yourself before playing")
+
+
 def set_autostart(on):
     if not IS_WIN:
-        print("On Linux use: systemctl --user enable --now wow-firstkills")
-        return
+        return set_autostart_linux(on)
     lnk, bat = startup_dir() / "FirstKills.lnk", startup_dir() / "FirstKills.bat"
     if not on:
         lnk.unlink(missing_ok=True)
@@ -694,6 +754,9 @@ def set_autostart(on):
 
 
 def start_background():
+    if not IS_WIN:
+        systemctl("start", UNIT)
+        return
     flags = 0x00000008 | 0x00000200  # DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP
     subprocess.Popen([str(pythonw()), str(SCRIPT), "--background"], cwd=str(SCRIPT.parent),
                      creationflags=flags if IS_WIN else 0, close_fds=True,
@@ -701,6 +764,10 @@ def start_background():
 
 
 def stop():
+    if not IS_WIN and systemctl("is-active", "--quiet", UNIT):
+        systemctl("stop", UNIT)
+        print("FirstKills stopped (it starts again at your next login if autostart is on).")
+        return
     if acquire_lock():
         print("FirstKills isn't running.")
         return
@@ -711,7 +778,8 @@ def stop():
         if not STOP_PATH.exists():
             print("FirstKills stopped.")
             return
-    print("FirstKills didn't respond; end 'pythonw.exe' in Task Manager.")
+    print("FirstKills didn't respond; end 'pythonw.exe' in Task Manager." if IS_WIN
+          else "FirstKills didn't respond; kill it with: pkill -f wow-firstkills.py")
 
 
 def main():
@@ -734,23 +802,29 @@ def main():
     if cmd == "stop":
         stop()
         return 0
+    if cmd == "install-addon":
+        refresh_addon()
+        return 0
     if cmd == "autostart":
         set_autostart(args[1:2] != ["off"])
         return 0
     if cmd == "start":
-        if not read_raw_config().get("webhook_url") and not setup(dry_run):
-            return 1
+        if not read_raw_config().get("webhook_url"):
+            if not setup(dry_run):
+                return 1
+        else:
+            refresh_addon()  # after an update, put the new addon version in the game
         if not dry_run and not acquire_lock():
             print("FirstKills is already running in the background. You can close this window.\n"
-                  "To stop it, run 'Stop FirstKills.bat'.")
+                  f"To stop it, {STOP_HINT}.")
             return 0
-        if IS_WIN and autostart_enabled():
+        if autostart_enabled():
             # Autostart is on but nothing runs yet (e.g. right after setup): start it hidden.
             release_lock()
             start_background()
             time.sleep(2)
             print("FirstKills is running in the background. You can close this window.\n"
-                  "To stop it, run 'Stop FirstKills.bat'.")
+                  f"To stop it, {STOP_HINT}.")
             return 0
         print("Watching... leave this window open while you play (close it to stop).\n")
 

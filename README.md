@@ -1,19 +1,37 @@
 # WoW addons
 
-Addons for World of Warcraft (mainly WoW Forever), one folder per addon.
+Addons for **World of Warcraft: Forever**. Pick one, download the file for your system,
+and follow its guide.
 
-| Addon | What it does |
-|---|---|
-| [FirstKills](FirstKills/) | Posts first kills, boss kills, enemy players, level milestones and progress reports to a Discord channel, with a watcher program for Linux and a no-install Windows package |
+| Addon | What it does | Windows | Linux (Wine / Proton) | Guide |
+|---|---|---|---|---|
+| **FirstKills** | Posts your first kills, boss kills, enemy players, level milestones and progress reports (gear, stats, gold) to a Discord channel | [Download](https://github.com/CrissZollo/wow-addons/releases/download/FirstKills-v1.0.0/FirstKills-Windows.zip) | [Download](https://github.com/CrissZollo/wow-addons/releases/download/FirstKills-v1.0.0/FirstKills-Linux.zip) | [Read me](FirstKills/README.md) |
 
-## Adding a new addon
+All versions are on the [releases page](https://github.com/CrissZollo/wow-addons/releases).
 
-Create a folder named exactly like the addon (the folder name must match its `.toc`
-file), put the `.toc` and `.lua` files in it, add a `README.md`, and add a row to the
-table above.
+## Windows or Linux?
 
-## Installing an addon
+- **Windows:** download the *Windows* file. Everything it needs is included.
+- **Linux:** WoW runs through Wine or Proton (Heroic, Lutris, Steam, Bottles). The addon part
+  works exactly as on Windows. Addons with a helper program (like FirstKills) have a *Linux*
+  download that uses your system's Python instead.
 
-Copy (or on Linux, symlink) the addon's folder into
-`World of Warcraft/_forever_/Interface/AddOns/`. Some addons need extra setup;
-see their own README.
+Each addon's guide lists any differences between the platforms.
+
+## Addons without a helper program
+
+Plain addons are installed the normal way. Extract the download and put the addon's folder in
+`World of Warcraft\_forever_\Interface\AddOns\` (on Linux, the same path inside your Wine
+prefix's `drive_c`). Then restart the game.
+
+---
+
+## For developers
+
+- **Layout:** one folder per addon, named exactly like its `.toc` file. Each has its own `README.md`.
+  Addons with downloads have a `build/package.sh` that writes zips to `<Addon>/dist/`, which isn't committed.
+- **Releasing:** commit your changes, then run `./release.sh <Addon> <version>`, e.g.
+  `./release.sh FirstKills 1.0.1`. It bumps the version, builds the zips, updates the download
+  links above, tags `<Addon>-v<version>`, pushes, and creates the GitHub release.
+- **Adding an addon:** create its folder, add a row to the table above (link format:
+  `releases/download/<Addon>-v<version>/<file>`), and give it a `build/package.sh` if it ships zips.
