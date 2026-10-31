@@ -24,7 +24,7 @@ You can delete the extracted folder afterwards.
 
 ## Herald
 
-1. Download [Herald-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Windows.zip).
+1. Download [Herald-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Windows.zip).
 2. Right-click it → **Extract All**, and put the folder somewhere permanent, e.g. `Documents\Herald-Windows`.
    Don't run it from inside the zip, and don't leave it in a temporary folder: the autostart points to this folder.
 3. Open the folder and double-click **Start Herald.bat**.

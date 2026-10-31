@@ -28,7 +28,7 @@ Herald består av två delar, och installationen sätter upp båda:
 
 | Windows | Linux (Wine / Proton) |
 |---|---|
-| [Herald-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Windows.zip) | [Herald-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Linux.zip) |
+| [Herald-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Windows.zip) | [Herald-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Linux.zip) |
 
 Äldre versioner finns på [releasesidan](https://github.com/CrissZollo/wow-addons/releases).
 

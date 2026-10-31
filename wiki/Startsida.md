@@ -9,7 +9,7 @@ vad du behöver och hur du får igång den på **Windows** och på **Linux**, d�
 
 | Addon | Vad den gör | Ladda ner (Windows) | Ladda ner (Linux) | Guide |
 |---|---|---|---|---|
-| **Herald** | Postar dina första kills, bosskills, fiendespelare, nivåmilstolpar och framstegsrapporter (utrustning, stats, guld) i vår Discord-kanal | [Herald-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Windows.zip) | [Herald-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Linux.zip) | [[Herald på svenska]] |
+| **Herald** | Postar dina första kills, bosskills, fiendespelare, nivåmilstolpar och framstegsrapporter (utrustning, stats, guld) i vår Discord-kanal | [Herald-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Windows.zip) | [Herald-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Linux.zip) | [[Herald på svenska]] |
 
 Äldre versioner finns på [releasesidan](https://github.com/CrissZollo/wow-addons/releases).
 

@@ -42,7 +42,7 @@ You can delete the extracted folder afterwards.
 
 Then:
 
-1. Download [Herald-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Linux.zip) and extract it.
+1. Download [Herald-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Linux.zip) and extract it.
 2. Open a terminal in the extracted `Herald-Linux` folder (most file managers: right-click → *Open Terminal Here*) and run:
    ```sh
    bash install.sh

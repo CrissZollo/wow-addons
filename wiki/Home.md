@@ -9,7 +9,7 @@ what you need, and how to get it working on **Windows** and on **Linux**, where 
 
 | Addon | What it does | Download (Windows) | Download (Linux) | Guide |
 |---|---|---|---|---|
-| **Herald** | Posts your first kills, boss kills, enemy players, level milestones and progress reports (gear, stats, gold) to our Discord channel | [Herald-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Windows.zip) | [Herald-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Linux.zip) | [[Herald]] |
+| **Herald** | Posts your first kills, boss kills, enemy players, level milestones and progress reports (gear, stats, gold) to our Discord channel | [Herald-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Windows.zip) | [Herald-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Linux.zip) | [[Herald]] |
 
 Older versions are on the [releases page](https://github.com/CrissZollo/wow-addons/releases).
 

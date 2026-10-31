@@ -24,7 +24,7 @@ Du kan radera den uppackade mappen efteråt.
 
 ## Herald
 
-1. Ladda ner [Herald-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Windows.zip).
+1. Ladda ner [Herald-Windows.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Windows.zip).
 2. Högerklicka på den → **Extrahera alla**, och lägg mappen på ett ställe där den får ligga kvar, t.ex. `Dokument\Herald-Windows`.
    Kör den inte inifrån zip-filen och lämna den inte i en tillfällig mapp: autostarten pekar på den här mappen.
 3. Öppna mappen och dubbelklicka på **Start Herald.bat**.

@@ -5,7 +5,7 @@ and follow its guide.
 
 | Addon | What it does | Windows | Linux (Wine / Proton) | Guide |
 |---|---|---|---|---|
-| **Herald** | Posts your first kills, boss kills, enemy players, level milestones and progress reports (gear, stats, gold) to a Discord channel | [Download](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Windows.zip) | [Download](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Linux.zip) | [Read me](Herald/README.md) |
+| **Herald** | Posts your first kills, boss kills, enemy players, level milestones and progress reports (gear, stats, gold) to a Discord channel | [Download](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Windows.zip) | [Download](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Linux.zip) | [Read me](Herald/README.md) |
 
 All versions are on the [releases page](https://github.com/CrissZollo/wow-addons/releases).
 

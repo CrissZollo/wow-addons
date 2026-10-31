@@ -42,7 +42,7 @@ Du kan radera den uppackade mappen efteråt.
 
 Sedan:
 
-1. Ladda ner [Herald-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Linux.zip) och packa upp den.
+1. Ladda ner [Herald-Linux.zip](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Linux.zip) och packa upp den.
 2. Öppna en terminal i den uppackade mappen `Herald-Linux` (i de flesta filhanterare: högerklicka → *Öppna terminal här*) och kör:
    ```sh
    bash install.sh

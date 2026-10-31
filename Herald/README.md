@@ -18,7 +18,7 @@ only time WoW lets addons save their data.
 
 | Windows | Linux (Wine / Proton) |
 |---|---|
-| [**Herald-Windows.zip**](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Windows.zip) | [**Herald-Linux.zip**](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.0.0/Herald-Linux.zip) |
+| [**Herald-Windows.zip**](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Windows.zip) | [**Herald-Linux.zip**](https://github.com/CrissZollo/wow-addons/releases/download/Herald-v1.1.0/Herald-Linux.zip) |
 
 Older versions are on the [releases page](https://github.com/CrissZollo/wow-addons/releases).
 

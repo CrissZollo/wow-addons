@@ -1,0 +1,63 @@
+{
+ "format": 1,
+ "updater": {
+  "version": "1.0.0",
+  "tag": "Herald-v1.1.0",
+  "files": [
+   {
+    "src": "updater/updater.py",
+    "to": "updater/updater.py",
+    "sha256": "23bf8a3699dedc3386cd0e8da83deef45a3d3c3980132ae5bf462eac621db6ab"
+   },
+   {
+    "src": "updater/AddonUpdater/AddonUpdater.lua",
+    "to": "addons/AddonUpdater/AddonUpdater.lua",
+    "sha256": "fecfede8063cef2844e1f2104c46dd27829dbbde5b6fc7731386579e3e1c3609"
+   },
+   {
+    "src": "updater/AddonUpdater/AddonUpdater.toc",
+    "to": "addons/AddonUpdater/AddonUpdater.toc",
+    "sha256": "b2dd3401e13a81d3aaa4ab001b213cc250e08940c118f0c3fb9a677338a379cf"
+   }
+  ]
+ },
+ "addons": {
+  "Herald": {
+   "version": "1.1.0",
+   "tag": "Herald-v1.1.0",
+   "notes": "Herald now keeps itself up to date: new versions install automatically",
+   "files": [
+    {
+     "src": "Herald/Herald.lua",
+     "to": "addons/Herald/Herald.lua",
+     "sha256": "33b3f1c00e12d361f6ce1bf24bb45764799153289685625e6ecc17cc1aff6934"
+    },
+    {
+     "src": "Herald/Herald.toc",
+     "to": "addons/Herald/Herald.toc",
+     "sha256": "270c15bc7799ece1a4155e80e058721fd60428a439d7064f184c362fbabef11c"
+    },
+    {
+     "src": "Herald/watcher/herald.py",
+     "to": "program/watcher/herald.py",
+     "sha256": "8f36882d8e1b3c7d3d63051bd7908196f0db0611bcf73feeb5966ac8844fd436"
+    },
+    {
+     "src": "Herald/watcher/progress.py",
+     "to": "program/watcher/progress.py",
+     "sha256": "bab7969cf46dec185e259dfaade723e5641bb654e2149f5099b551904790d403"
+    },
+    {
+     "src": "Herald/Herald.toc",
+     "to": "program/Herald/Herald.toc",
+     "sha256": "270c15bc7799ece1a4155e80e058721fd60428a439d7064f184c362fbabef11c"
+    },
+    {
+     "src": "Herald/Herald.lua",
+     "to": "program/Herald/Herald.lua",
+     "sha256": "33b3f1c00e12d361f6ce1bf24bb45764799153289685625e6ecc17cc1aff6934"
+    }
+   ]
+  }
+ }
+}
