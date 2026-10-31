@@ -1,0 +1,4 @@
+# build output (e.g. FirstKills/dist/FirstKills-Windows.zip)
+dist/
+__pycache__/
+*.pyc

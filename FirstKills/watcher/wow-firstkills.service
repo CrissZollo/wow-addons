@@ -1,0 +1,10 @@
+[Unit]
+Description=Post WoW Forever first kills to Discord
+
+[Service]
+ExecStart=/usr/bin/python3 %h/Projects/wow-addons/FirstKills/watcher/wow-firstkills.py
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

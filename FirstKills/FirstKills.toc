@@ -1,0 +1,6 @@
+## Interface: 16001
+## Title: First Kills
+## Notes: Keeps combat logging on and saves character snapshots so the wow-firstkills watcher can post first kills, level milestones and progress reports to Discord.
+## SavedVariables: FirstKillsDB
+
+FirstKills.lua
