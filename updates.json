@@ -2,7 +2,7 @@
  "format": 1,
  "updater": {
   "version": "1.0.0",
-  "tag": "Herald-v1.1.0",
+  "tag": "Herald-v1.1.1",
   "files": [
    {
     "src": "updater/updater.py",
@@ -23,19 +23,19 @@
  },
  "addons": {
   "Herald": {
-   "version": "1.1.0",
-   "tag": "Herald-v1.1.0",
-   "notes": "Herald now keeps itself up to date: new versions install automatically",
+   "version": "1.1.1",
+   "tag": "Herald-v1.1.1",
+   "notes": "Progress reports now show your real level, stats, gold and gear.",
    "files": [
     {
      "src": "Herald/Herald.lua",
      "to": "addons/Herald/Herald.lua",
-     "sha256": "33b3f1c00e12d361f6ce1bf24bb45764799153289685625e6ecc17cc1aff6934"
+     "sha256": "e024b9e386076f70424bc34545694d80875d01e80d1aed9b4ec701248c52eb73"
     },
     {
      "src": "Herald/Herald.toc",
      "to": "addons/Herald/Herald.toc",
-     "sha256": "270c15bc7799ece1a4155e80e058721fd60428a439d7064f184c362fbabef11c"
+     "sha256": "0a026e607baf01ba40aabafd4973cf30b5ce8c75ff1df6f3718e7e2a04f40e4f"
     },
     {
      "src": "Herald/watcher/herald.py",
@@ -45,17 +45,17 @@
     {
      "src": "Herald/watcher/progress.py",
      "to": "program/watcher/progress.py",
-     "sha256": "bab7969cf46dec185e259dfaade723e5641bb654e2149f5099b551904790d403"
+     "sha256": "aa2fbf9c5519187af48957d016dc109a584d67877e5e36769911b056a71c19c9"
     },
     {
      "src": "Herald/Herald.toc",
      "to": "program/Herald/Herald.toc",
-     "sha256": "270c15bc7799ece1a4155e80e058721fd60428a439d7064f184c362fbabef11c"
+     "sha256": "0a026e607baf01ba40aabafd4973cf30b5ce8c75ff1df6f3718e7e2a04f40e4f"
     },
     {
      "src": "Herald/Herald.lua",
      "to": "program/Herald/Herald.lua",
-     "sha256": "33b3f1c00e12d361f6ce1bf24bb45764799153289685625e6ecc17cc1aff6934"
+     "sha256": "e024b9e386076f70424bc34545694d80875d01e80d1aed9b4ec701248c52eb73"
     }
    ]
   }
