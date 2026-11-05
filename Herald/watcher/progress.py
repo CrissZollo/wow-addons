@@ -313,6 +313,12 @@ def report_message(cfg, info, before, after, played, new_kills):
 
 # ---------------------------------------------------------------- watcher
 
+def usable(snap):
+    """False for a snapshot taken after the game emptied the character (Herald 1.1.0 and
+    older snapshotted at logout), where every stat reads 0 and the level is out of date."""
+    return bool(snap) and ((snap.get("stats") or {}).get("sta") or 0) > 0
+
+
 class Progress:
     def __init__(self, cfg, post, kills_state, state_path, dry_run=False):
         self.cfg, self.post, self.kills_state, self.dry_run = cfg, post, kills_state, dry_run
@@ -367,7 +373,13 @@ class Progress:
         last = char.get("last")
         if not last or rep.get("seen") == last.get("t"):
             return
-        baseline = rep.get("baseline") or char.get("start")
+        if not usable(last):
+            print(f"[herald] {key}: skipping a progress report, the saved data is empty "
+                  "(the addon updates the next time you log in)", flush=True)
+            rep["seen"] = last.get("t")
+            self.save()
+            return
+        baseline = next((s for s in (rep.get("baseline"), char.get("start")) if usable(s)), None)
         since = max(last.get("sessionStart") or last["t"], (baseline or {}).get("t") or 0)
         played = last["t"] - since
         if baseline and played >= self.cfg["min_report_minutes"] * 60:

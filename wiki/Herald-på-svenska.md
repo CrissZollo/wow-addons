@@ -57,7 +57,7 @@ Herald består av två delar, och installationen sätter upp båda:
 
 | I spelet | |
 |---|---|
-| `/herald` | Visar om stridsloggningen är på och hur länge sessionen har pågått |
+| `/herald` | Visar om stridsloggningen är på, hur länge sessionen har pågått och hur gammal den senaste sparade bilden av karaktären är |
 | `/reload` | Postar en framstegsrapport direkt, om du spelat 5+ minuter sedan förra |
 | `/updates` | Visar Heralds version (från Addon Updater, se [[Automatiska uppdateringar]]) |
 

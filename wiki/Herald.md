@@ -57,7 +57,7 @@ Older versions are on the [releases page](https://github.com/CrissZollo/wow-addo
 
 | In game | |
 |---|---|
-| `/herald` | Shows whether combat logging is on and how long the session has run |
+| `/herald` | Shows whether combat logging is on, how long the session has run and how old the last character snapshot is |
 | `/reload` | Posts a progress report right away, if you've played 5+ minutes since the last one |
 | `/updates` | Shows Herald's version (from the Addon Updater, see [[Automatic Updates]]) |
 
