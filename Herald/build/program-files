@@ -4,6 +4,8 @@
 # <file in Herald/>     <where it goes in the program folder>
 watcher/herald.py       watcher/herald.py
 watcher/progress.py     watcher/progress.py
+watcher/phone.py        watcher/phone.py
+watcher/phone.html      watcher/phone.html
 # The copy of the addon that "Start Herald" puts into the game; keep it current too.
 Herald.toc              Herald/Herald.toc
 Herald.lua              Herald/Herald.lua

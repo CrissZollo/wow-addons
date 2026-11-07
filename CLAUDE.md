@@ -47,7 +47,8 @@ Config/state live in `~/.config/herald/config.json` and `~/.local/share/herald/`
 Herald has two halves, because WoW addons can't reach the network:
 
 1. **In-game addon** (`Herald/Herald.lua`): forces combat logging on, and stores per-character
-   snapshots (level, XP, gold, stats, gear) plus milestone level-ups in the `HeraldDB` SavedVariable.
+   snapshots (level, XP, rested XP, gold, stats, gear), the guild (name, rank, MOTD, roster) and
+   milestone level-ups in the `HeraldDB` SavedVariable.
    It also calls `Screenshot()` on milestone levels. WoW only writes SavedVariables at logout or `/reload`,
    so anything that depends on `HeraldDB` posts then.
 2. **Watcher** (`Herald/watcher/`, a Python program on the PC) runs one polling loop (`watch()` in
@@ -58,6 +59,13 @@ Herald has two halves, because WoW addons can't reach the network:
    - `progress.Progress.check()` watches `WTF/Account/*/SavedVariables/Herald.lua` mtimes, parses the Lua
      table with its own small parser (`parse_saved_variables`), and posts milestone cards (with the
      screenshot attached) and progress reports (state in `reports.json`).
+
+   - `phone.Phone` (only when `phone_port` in the config is non-zero; `herald.py phone on|off`):
+     a stdlib HTTP server thread on the home network serving `phone.html` (`/`, `/widget`) and
+     `/api/characters.json` / `/api/widget.json` (flat fields for Android KWGT widgets). The main loop
+     builds the data (`Phone.update`) from `Progress.chars` and the kill state; the server threads only
+     serve the latest copy. "In game" means the combat log grew in the last 5 minutes. Personal feature:
+     not in the player docs or wiki.
 
    The same file also has the setup/install side: finding the game dir (Windows registry/drives, or
    common Wine prefixes on Linux), copying the addon into `Interface/AddOns`, autostart (Windows
@@ -70,7 +78,8 @@ Herald registers itself with the Addon Updater (`register_updater()`), and `watc
 log where it stopped.
 
 The data contract between the two halves is the `HeraldDB.chars[<Name-Realm>]` shape (`info`, `start`,
-`last`, `milestones`, `sessionStart`). Changing a field in `Herald.lua` means updating `progress.py`.
+`last`, `milestones`, `sessionStart`, `guild`). Changing a field in `Herald.lua` means updating
+`progress.py` (and `phone.py`).
 
 ## Addon Updater (`updater/`)
 
