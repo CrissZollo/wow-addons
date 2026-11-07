@@ -319,6 +319,20 @@ def usable(snap):
     return bool(snap) and ((snap.get("stats") or {}).get("sta") or 0) > 0
 
 
+def kills_of(info, kills_state):
+    """(key, kill) pairs the watcher recorded for this character. The combat log names
+    characters "Name" or "Name-Realm", so match on both."""
+    name = info.get("name")
+    realm = (info.get("realm") or "").replace(" ", "")
+    out = []
+    for char, kills in list(kills_state.items()):
+        parts = char.split("-")
+        if parts[0] != name or (realm and len(parts) > 1 and parts[1] != realm):
+            continue
+        out += list(kills.items())
+    return out
+
+
 class Progress:
     def __init__(self, cfg, post, kills_state, state_path, dry_run=False):
         self.cfg, self.post, self.kills_state, self.dry_run = cfg, post, kills_state, dry_run
@@ -326,6 +340,7 @@ class Progress:
         self.state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.exists() else {}
         self.seen_mtime = {}
         self.next_check = 0.0
+        self.chars = {}  # "Name-Realm" -> the addon's latest saved data, for the phone page
 
     def save(self):
         self.state_path.parent.mkdir(parents=True, exist_ok=True)
@@ -353,6 +368,7 @@ class Progress:
             self.seen_mtime[path] = mtime
             for key, char in (db.get("chars") or {}).items():
                 if isinstance(char, dict):
+                    self.chars[key] = char
                     self.handle(key, char)
 
     def handle(self, key, char):
@@ -393,15 +409,8 @@ class Progress:
         self.save()
 
     def new_kills(self, info, start, end):
-        name = info.get("name")
-        realm = (info.get("realm") or "").replace(" ", "")
-        out = []
-        for char, kills in self.kills_state().items():
-            parts = char.split("-")
-            if parts[0] != name or (realm and len(parts) > 1 and parts[1] != realm):
-                continue
-            out += [(k["t"], mob) for mob, k in kills.items()
-                    if not mob.startswith("pvp:") and start <= k.get("t", 0) <= end]
+        out = [(k["t"], mob) for mob, k in kills_of(info, self.kills_state())
+               if not mob.startswith("pvp:") and start <= k.get("t", 0) <= end]
         return [mob for _, mob in sorted(out)]
 
     def find_screenshot(self, t):

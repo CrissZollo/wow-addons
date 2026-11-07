@@ -14,7 +14,8 @@ common() {  # $1 = package folder: the addon, the watcher and the Addon Updater
     rm -rf "$1"
     mkdir -p "$1/Herald" "$1/watcher"
     cp "$ROOT/Herald.toc" "$ROOT/Herald.lua" "$1/Herald/"
-    cp "$ROOT/watcher/herald.py" "$ROOT/watcher/progress.py" "$1/watcher/"
+    cp "$ROOT/watcher/herald.py" "$ROOT/watcher/progress.py" "$ROOT/watcher/phone.py" \
+       "$ROOT/watcher/phone.html" "$1/watcher/"
     chmod +x "$1/watcher/herald.py"
     add_updater "$1"
 }

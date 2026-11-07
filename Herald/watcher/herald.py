@@ -19,6 +19,7 @@ Config and state: ~/.config/herald + ~/.local/share/herald (Linux),
   herald.py autostart on|off   start with Windows (Windows only)
   herald.py test         post sample messages to the webhook
   herald.py list         show recorded first kills
+  herald.py phone [on [port] | off]   the phone page on your home network (off by default)
   add --dry-run to print the messages instead of posting them
 
 Setup and start also hand Herald to the Addon Updater shipped in the download
@@ -44,6 +45,7 @@ from pathlib import Path
 
 SCRIPT = Path(__file__).resolve()
 sys.path.insert(0, str(SCRIPT.parent))  # the embeddable Windows Python doesn't add it
+import phone  # noqa: E402
 import progress  # noqa: E402
 
 IS_WIN = os.name == "nt"
@@ -78,6 +80,8 @@ DEFAULTS = {
     # Default to the WTF and Screenshots folders next to logs_dir.
     "wtf_dir": "",
     "screenshots_dir": "",
+    # Phone page on the home network (see phone.py). 0 = off.
+    "phone_port": 0,
 }
 REPORTS_PATH = STATE_PATH.with_name("reports.json")
 UA = "herald/1.1"
@@ -535,7 +539,8 @@ def release_lock():
 def own_files_stamp():
     """Changes when the Addon Updater replaces this program's files."""
     try:
-        return tuple(p.stat().st_mtime_ns for p in (SCRIPT, SCRIPT.with_name("progress.py")))
+        return tuple(p.stat().st_mtime_ns
+                     for p in (SCRIPT, SCRIPT.with_name("progress.py"), SCRIPT.with_name("phone.py")))
     except OSError:
         return None
 
@@ -566,6 +571,8 @@ def watch(cfg, dry_run):
     STOP_PATH.unlink(missing_ok=True)
     tracker = Tracker(cfg, load_state(), dry_run)
     reports = progress.Progress(cfg, post, lambda: tracker.state, REPORTS_PATH, dry_run)
+    page = phone.Phone(cfg, int(cfg["phone_port"]), log) if cfg.get("phone_port") else None
+    last_line = None  # when the combat log last grew: you're in game
     current, fh, buf = None, None, b""
     stamp, changed_at = own_files_stamp(), None
     log(f"watching {cfg['logs_dir']} and {cfg['wtf_dir']}")
@@ -586,6 +593,8 @@ def watch(cfg, dry_run):
                 fh.close()
             restart(f"{current or ''}\n{pos}")
         reports.check()
+        if page:
+            page.update(reports.chars, tracker.state, (tracker.me, last_line, tracker.zone))
         latest = newest_log(cfg["logs_dir"])
         if latest and latest != current:
             if fh:
@@ -604,6 +613,7 @@ def watch(cfg, dry_run):
                 buf = b""
             chunk = fh.read()
             if chunk:
+                last_line = time.time()
                 buf += chunk
                 *lines, buf = buf.split(b"\n")
                 for raw in lines:
@@ -846,6 +856,23 @@ def stop():
           else "Herald didn't respond; kill it with: pkill -f herald.py")
 
 
+def phone_command(args):
+    raw = read_raw_config()
+    if args[:1] == ["on"]:
+        port = int(args[1]) if args[1:2] and args[1].isdigit() else phone.DEFAULT_PORT
+        save_raw_config({**raw, "phone_port": port})
+    elif args[:1] == ["off"]:
+        save_raw_config({**raw, "phone_port": 0})
+    port = read_raw_config().get("phone_port") or 0
+    if not port:
+        print("The phone page is off. Turn it on with: phone on")
+    else:
+        print(f"The phone page is on. On your phone (same Wi-Fi), open:\n\n    {phone.url(port)}\n\n"
+              "If it doesn't load, allow Python through this PC's firewall.")
+    if args[:1] in (["on"], ["off"]):
+        print(f"Restart Herald for the change to take effect ({STOP_HINT}, then start it again).")
+
+
 def main():
     if sys.stdout is None or "--background" in sys.argv:  # no console: log to a file
         LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -871,6 +898,9 @@ def main():
         return 0
     if cmd == "autostart":
         set_autostart(args[1:2] != ["off"])
+        return 0
+    if cmd == "phone":
+        phone_command(args[1:])
         return 0
     if cmd == "start":
         if not read_raw_config().get("webhook_url"):
